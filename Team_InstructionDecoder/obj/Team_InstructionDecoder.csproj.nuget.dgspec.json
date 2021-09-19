@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\hunte\\source\\repos\\Team_InstructionDecoder\\Team_InstructionDecoder\\Team_InstructionDecoder.csproj": {}
+    "C:\\Users\\hunte\\Source\\Repos\\Project1_InstructionSets\\Team_InstructionDecoder\\Team_InstructionDecoder.csproj": {}
   },
   "projects": {
-    "C:\\Users\\hunte\\source\\repos\\Team_InstructionDecoder\\Team_InstructionDecoder\\Team_InstructionDecoder.csproj": {
+    "C:\\Users\\hunte\\Source\\Repos\\Project1_InstructionSets\\Team_InstructionDecoder\\Team_InstructionDecoder.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\hunte\\source\\repos\\Team_InstructionDecoder\\Team_InstructionDecoder\\Team_InstructionDecoder.csproj",
+        "projectUniqueName": "C:\\Users\\hunte\\Source\\Repos\\Project1_InstructionSets\\Team_InstructionDecoder\\Team_InstructionDecoder.csproj",
         "projectName": "Team_InstructionDecoder",
-        "projectPath": "C:\\Users\\hunte\\source\\repos\\Team_InstructionDecoder\\Team_InstructionDecoder\\Team_InstructionDecoder.csproj",
+        "projectPath": "C:\\Users\\hunte\\Source\\Repos\\Project1_InstructionSets\\Team_InstructionDecoder\\Team_InstructionDecoder.csproj",
         "packagesPath": "C:\\Users\\hunte\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\hunte\\source\\repos\\Team_InstructionDecoder\\Team_InstructionDecoder\\obj\\",
+        "outputPath": "C:\\Users\\hunte\\Source\\Repos\\Project1_InstructionSets\\Team_InstructionDecoder\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
