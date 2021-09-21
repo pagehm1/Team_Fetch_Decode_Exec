@@ -14,10 +14,11 @@ namespace Team_Instruction_Fetch_Decode_Execute
     public partial class Form1 : Form
     {
 
-        
+        Processor primaryProcessor; 
 
         public Form1()
         {
+            primaryProcessor = new Processor();
             InitializeComponent();
         }
 
@@ -34,8 +35,12 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 //grab text from the file
                 string text = File.ReadAllText(filePath);
 
-                BinaryTextBox.Text = text;
+                primaryProcessor.memoryEntry(text);
+
+                BinaryTextBox.Text = primaryProcessor.formatMemory();
             }
+
+
 
         }
     }
