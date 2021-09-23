@@ -29,6 +29,8 @@ namespace Team_Instruction_Fetch_Decode_Execute
         //keeps track of the last place memory was entered
         public int counter { get; set; }
 
+        public bool IsStopped { get; set; }
+
         public Processor()
         {
             Memory = new byte[1048576];
@@ -61,31 +63,31 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 case 0x00: // ADD or SUB Instruction
                     if (lowerNibble == 0x01) // ADD (A + X)
                     {
-                        return ProgramCounter.ToString() + byteToDecode.ToString() + "ADD X";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + "ADD X";
                     }
                     else if (lowerNibble == 0x02) // ADD (A + IMM)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + byteToDecode.ToString() + "ADD " + operand.ToString() + ", imm";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + "ADD " + operand.ToString() + ", imm";
                     }
                     else if (lowerNibble == 0x03) // ADD (A + MEM)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + byteToDecode.ToString() + "ADD " + operand.ToString() + ", mem";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + "ADD " + operand.ToString() + ", mem";
                     }
                     else if (lowerNibble == 0x09) // SUB (A - X)
                     {
-                        return ProgramCounter.ToString() + byteToDecode.ToString() + "SUB X";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + "SUB X";
                     }
                     else if(lowerNibble == 0x0A) // SUB (A - IMM)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + byteToDecode.ToString() + "SUB " + operand.ToString() + ", imm";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + "SUB " + operand.ToString() + ", imm";
                     }
                     else if (lowerNibble == 0x0B) // SUB (A - MEM)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + byteToDecode.ToString() + " SUB " + operand.ToString() + ", mem";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " SUB " + operand.ToString() + ", mem";
                     }
 
                     break;
@@ -299,7 +301,8 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 case 0x0F: // YD Instruction
                     if (lowerNibble == 0x0F) // YD
                     {
-                        return "YD";
+                        IsStopped = 1;
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " YD";
                     }
 
                     break;

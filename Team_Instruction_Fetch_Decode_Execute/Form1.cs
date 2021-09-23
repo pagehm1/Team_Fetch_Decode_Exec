@@ -26,9 +26,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 
         public void StartProc()
         {
-            int stopCond = 0;
-
-            while (stopCond != 1)
+            while (primaryProcessor.IsStopped != 1)
             {
               //ListBox.Add(primaryProcessor.Decode(primaryProcessor.Memory[primaryProcessor.ProgramCounter])); // Add string we built about instruction into list box
 
