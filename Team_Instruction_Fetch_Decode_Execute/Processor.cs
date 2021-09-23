@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Team_Instruction_Fetch_Decode_Execute
 {
-    class Processor
+    public class Processor
     {
-        public string[] Memory { get; set; }
+        public byte[] Memory { get; set; }
 
         public ushort Accumulator { get; set; }
 
@@ -31,7 +31,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 
         public Processor()
         {
-            Memory = new string[1048576];
+            Memory = new byte[1048576];
             Accumulator = 0x0000;
             X_Register = 0x0000;
             ProgramCounter = 0x0000;
@@ -42,36 +42,309 @@ namespace Team_Instruction_Fetch_Decode_Execute
             TrueFlag = false;
         }
 
-        public void memoryEntry(string entryCode)
+        public void PopulateMemory(byte byteToInsert)
         {
-            char[] entryCodeArray = entryCode.ToCharArray();
-
-            for(int i = 0; i  < entryCodeArray.Length - 3; i+=3)
-            {                    
-                Memory[counter] = entryCodeArray[i].ToString() + entryCodeArray[i + 1].ToString();
-
-                counter++;
-            }
+            Memory[counter] = byteToInsert;
+            counter++;
         }
 
-        public string formatMemory()
+        public string Decode(byte byteToDecode)
         {
-            int newLineCounter = 0;
-            StringBuilder formattedMem = new StringBuilder();
+            //string returnString = "";
+            ushort operand;
 
-            for(int i = 0; i < counter; i++)
+            byte upperNibble = (byte)(byteToDecode >> 4);
+            byte lowerNibble = (byte)(byteToDecode & 0b00001111);
+
+            switch (upperNibble)
             {
-                formattedMem.Append(Memory[i] + " ");
-                newLineCounter++;
+                case 0x00: // ADD or SUB Instruction
+                    if (lowerNibble == 0x01) // ADD (A + X)
+                    {
+                        return ProgramCounter.ToString() + byteToDecode.ToString() + "ADD X";
+                    }
+                    else if (lowerNibble == 0x02) // ADD (A + IMM)
+                    {
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + byteToDecode.ToString() + "ADD " + operand.ToString() + ", imm";
+                    }
+                    else if (lowerNibble == 0x03) // ADD (A + MEM)
+                    {
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + byteToDecode.ToString() + "ADD " + operand.ToString() + ", mem";
+                    }
+                    else if (lowerNibble == 0x09) // SUB (A - X)
+                    {
+                        return ProgramCounter.ToString() + byteToDecode.ToString() + "SUB X";
+                    }
+                    else if(lowerNibble == 0x0A) // SUB (A - IMM)
+                    {
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + byteToDecode.ToString() + "SUB " + operand.ToString() + ", imm";
+                    }
+                    else if (lowerNibble == 0x0B) // SUB (A - MEM)
+                    {
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + byteToDecode.ToString() + " SUB " + operand.ToString() + ", mem";
+                    }
 
-                if(newLineCounter >= 8)
-                {
-                    formattedMem.Append("\n");
-                }
+                    break;
+                case 0x01: // AND or OR Instruction
+                    if (lowerNibble == 0x01) // AND (A & X)
+                    {
+                        
+                    }
+                    else if (lowerNibble == 0x02) // AND (A & IMM)
+                    {
 
+                    }
+                    else if (lowerNibble == 0x03) // AND (A & MEM)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x09) // OR (A | X)
+                    {
+                        
+                    }
+                    else if (lowerNibble == 0x0A) // OR (A | IMM)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x0B) // OR (A | MEM)
+                    {
+
+                    }
+
+                    break;
+                case 0x02: // XOR or LDA Instruction
+                    if (lowerNibble == 0x01) // XOR (A ^ X)
+                    {
+                        
+                    }
+                    else if (lowerNibble == 0x02) // XOR (A ^ IMM)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x03) // XOR (A ^ MEM)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x09) // LDA (X -> A)
+                    {
+                        
+                    }
+                    else if (lowerNibble == 0x0A) // LDA (IMM -> A)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x0B) // LDA (MEM -> A)
+                    {
+
+                    }
+
+                    break;
+                case 0x03: // LDX or STA Instruction
+                    if (lowerNibble == 0x00) // LDX (A -> X)
+                    {
+                        
+                    }
+                    else if (lowerNibble == 0x02) // LDX (IMM -> X)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x03) // LDX (MEM -> X)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x09) // STA (A -> X)
+                    {
+                        
+                    }
+                    else if (lowerNibble == 0x0B) // STA (A -> MEM)
+                    {
+
+                    }
+
+                    break;
+                case 0x04: // STX Instruction
+                    if (lowerNibble == 0x00) // STX (X -> A)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x03) // STX (X -> MEM)
+                    {
+
+                    }
+
+                    break;
+                case 0x05: // BRNT, CPE, or BRT Instruction
+                    if (lowerNibble == 0x07) // BRNT
+                    {
+
+                    }
+                    else if (lowerNibble == 0x09) // CPE (A to X)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x0A) // CPE (A to IMM)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x0B) // CPE (A to MEM)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x0F) // BRT
+                    {
+                        
+                    }
+
+                    break;
+                case 0x06: // CPLT or CPLE Instruction
+                    if (lowerNibble == 0x01) // CPLT (A to X)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x02) // CPLT (A to IMM)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x03) // CPLT (A to MEM)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x09) // CPLE (A to X)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x0A) // CPLE (A to IMM)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x0B) // CPLE (A to MEM)
+                    {
+
+                    }
+
+                    break;
+                case 0x07: // CPGT or CPGE Instruction
+                    if (lowerNibble == 0x01) // CPGT (A to X)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x02) // CPGT(A to IMM)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x03) // CPGT(A to MEM)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x09) // CPGE(A to X)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x0A) // CPGE(A to IMM)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x0B) // CPGE (A to MEM)
+                    {
+
+                    }
+
+                    break;
+                case 0x08: // PUSH or POP Instruction
+                    if (lowerNibble == 0x00) // PUSH (A)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x01) // PUSH (X)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x02) // PUSH (IMM)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x03) // PUSH (MEM)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x08) // POP
+                    {
+
+                    }
+
+                    break;
+                case 0x09: // NEG or NOT Instruction
+                    if (lowerNibble == 0x00) // NEG(A)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x01) // NEG(X)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x08) // NOT(A)
+                    {
+
+                    }
+                    else if (lowerNibble == 0x09) // NOT(X)
+                    {
+
+                    }
+
+                    break;
+                case 0x0F: // YD Instruction
+                    if (lowerNibble == 0x0F) // YD
+                    {
+                        return "YD";
+                    }
+
+                    break;
+                default:
+                    break;
             }
 
-            return formattedMem.ToString();
+            //Execute(instructionBits, addressBits);
         }
+
+        /*
+        public void incrementPC()
+        {
+            ProgramCounter++;
+        }
+        */
+
+        public ushort FetchOperand() // FA 10 = 0000000011111010 -> Bitshift Right 8 -> 1111101000000000 + 10 -> ADD -> 1111101000010000 -> FA 10 as 16-bit
+        {
+            ushort operand = (ushort)((Memory[ProgramCounter] >> 8) + (Memory[ProgramCounter+0x1]));
+
+            ProgramCounter+=2;
+
+            return operand;
+        }
+        
+        /*
+        public void Execute(byte instructionBits, byte addressBits)
+        {
+
+            switch(instructionBits)
+            {
+                case 0x00:
+                    if(addressBits == 0x01)
+                    {
+
+                    }
+
+                    break;
+                default:
+                    break;
+                       
+            }
+
+        }
+        */
     }
 }

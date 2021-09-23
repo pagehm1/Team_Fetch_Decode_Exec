@@ -6,12 +6,7 @@ using System.Threading.Tasks;
 
 namespace Team_Instruction_Fetch_Decode_Execute
 {
-    class Register
+    class InstructionExecution
     {
-        public string Name { get; set; }
-
-        public byte value { get; set; }
-
-
     }
 }
