@@ -94,77 +94,93 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 case 0x01: // AND or OR Instruction
                     if (lowerNibble == 0x01) // AND (A & X)
                     {
-                        
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + "AND X";
                     }
                     else if (lowerNibble == 0x02) // AND (A & IMM)
                     {
-
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " AND  " + operand.ToString() + ", imm";
                     }
                     else if (lowerNibble == 0x03) // AND (A & MEM)
                     {
-
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " AND " + operand.ToString() + ", imm";
                     }
                     else if (lowerNibble == 0x09) // OR (A | X)
                     {
-                        
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " OR  X";
                     }
                     else if (lowerNibble == 0x0A) // OR (A | IMM)
                     {
-
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " OR " + operand.ToString() + ", imm";
                     }
                     else if (lowerNibble == 0x0B) // OR (A | MEM)
                     {
-
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " OR " + operand.ToString() + ", mem";
                     }
 
                     break;
                 case 0x02: // XOR or LDA Instruction
                     if (lowerNibble == 0x01) // XOR (A ^ X)
                     {
-                        
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " XOR X";
                     }
                     else if (lowerNibble == 0x02) // XOR (A ^ IMM)
                     {
-
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " XOR " + operand.ToString() + ", imm";
                     }
                     else if (lowerNibble == 0x03) // XOR (A ^ MEM)
                     {
-
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " XOR " + operand.ToString() + ", mem";
                     }
                     else if (lowerNibble == 0x09) // LDA (X -> A)
                     {
-                        
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA X";
                     }
                     else if (lowerNibble == 0x0A) // LDA (IMM -> A)
                     {
-
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", imm";
                     }
                     else if (lowerNibble == 0x0B) // LDA (MEM -> A)
                     {
-
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", mem";
                     }
 
                     break;
                 case 0x03: // LDX or STA Instruction
                     if (lowerNibble == 0x00) // LDX (A -> X)
                     {
-                        
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " STA X";
                     }
                     else if (lowerNibble == 0x02) // LDX (IMM -> X)
                     {
-
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", imm";
                     }
                     else if (lowerNibble == 0x03) // LDX (MEM -> X)
                     {
-
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", mem";
                     }
                     else if (lowerNibble == 0x09) // STA (A -> X)
                     {
-                        
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " STA X, " + operand.ToString() + ", A";
                     }
                     else if (lowerNibble == 0x0B) // STA (A -> MEM)
                     {
-
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " STA  mem" + operand.ToString() + ", A";
                     }
 
                     break;
