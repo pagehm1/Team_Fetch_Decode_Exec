@@ -29,7 +29,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
         //keeps track of the last place memory was entered
         public int counter { get; set; }
 
-        public bool IsStopped { get; set; }
+        public int IsStopped { get; set; }
 
         public Processor()
         {
@@ -63,26 +63,26 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 case 0x00: // ADD or SUB Instruction
                     if (lowerNibble == 0x01) // ADD (A + X)
                     {
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + "ADD X";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " ADD X";
                     }
                     else if (lowerNibble == 0x02) // ADD (A + IMM)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + "ADD " + operand.ToString() + ", imm";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " ADD " + operand.ToString() + ", imm";
                     }
                     else if (lowerNibble == 0x03) // ADD (A + MEM)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + "ADD " + operand.ToString() + ", mem";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " ADD " + operand.ToString() + ", mem";
                     }
                     else if (lowerNibble == 0x09) // SUB (A - X)
                     {
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + "SUB X";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " SUB X";
                     }
                     else if(lowerNibble == 0x0A) // SUB (A - IMM)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + "SUB " + operand.ToString() + ", imm";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " SUB " + operand.ToString() + ", imm";
                     }
                     else if (lowerNibble == 0x0B) // SUB (A - MEM)
                     {
@@ -232,69 +232,75 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 case 0x07: // CPGT or CPGE Instruction
                     if (lowerNibble == 0x01) // CPGT (A to X)
                     {
-
+                        return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + "CPGT X";
                     }
                     else if (lowerNibble == 0x02) // CPGT(A to IMM)
                     {
-
+                        operand = FetchOperand ( );
+                        return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " CPGT " + operand.ToString ( ) + ", imm";
                     }
                     else if (lowerNibble == 0x03) // CPGT(A to MEM)
                     {
-
+                        operand = FetchOperand ( );
+                        return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " CPGT " + operand.ToString ( ) + ", mem";
                     }
                     else if (lowerNibble == 0x09) // CPGE(A to X)
                     {
-
+                        return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " CPGE X";
                     }
                     else if (lowerNibble == 0x0A) // CPGE(A to IMM)
                     {
-
+                        operand = FetchOperand ( );
+                        return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " CPGE " + operand.ToString ( ) + ", imm";
                     }
                     else if (lowerNibble == 0x0B) // CPGE (A to MEM)
                     {
-
+                        operand = FetchOperand ( );
+                        return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " CPGE " + operand.ToString ( ) + ", mem";
                     }
 
                     break;
                 case 0x08: // PUSH or POP Instruction
                     if (lowerNibble == 0x00) // PUSH (A)
                     {
-
+                        return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " PUSH A";
                     }
                     else if (lowerNibble == 0x01) // PUSH (X)
                     {
-
+                        return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " PUSH X";
                     }
                     else if (lowerNibble == 0x02) // PUSH (IMM)
                     {
-
+                        operand = FetchOperand ( );
+                        return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " PUSH " + operand.ToString ( ) + ", imm";
                     }
                     else if (lowerNibble == 0x03) // PUSH (MEM)
                     {
-
+                        operand = FetchOperand ( );
+                        return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " PUSH " + operand.ToString ( ) + ", mem";
                     }
                     else if (lowerNibble == 0x08) // POP
                     {
-
+                        return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " POP";
                     }
 
                     break;
                 case 0x09: // NEG or NOT Instruction
                     if (lowerNibble == 0x00) // NEG(A)
                     {
-
+                        return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " NEG A";
                     }
                     else if (lowerNibble == 0x01) // NEG(X)
                     {
-
+                        return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " NEG X";
                     }
                     else if (lowerNibble == 0x08) // NOT(A)
                     {
-
+                        return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " NOT A";
                     }
                     else if (lowerNibble == 0x09) // NOT(X)
                     {
-
+                        return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " NOT X";
                     }
 
                     break;
