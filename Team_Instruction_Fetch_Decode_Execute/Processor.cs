@@ -31,6 +31,10 @@ namespace Team_Instruction_Fetch_Decode_Execute
 
         public int IsStopped { get; set; }
 
+        public string InstructionRep { get; set; }
+
+        public List<Object> updatedItems { get; set; }
+
         public Processor()
         {
             Memory = new byte[1048576];
@@ -50,10 +54,16 @@ namespace Team_Instruction_Fetch_Decode_Execute
             counter++;
         }
 
+        public void updateRegistersAndFlags()
+        {
+
+        }
+
         public string Decode(byte byteToDecode)
         {
             //string returnString = "";
             ushort operand;
+
 
             byte upperNibble = (byte)(byteToDecode >> 4);
             byte lowerNibble = (byte)(byteToDecode & 0b00001111);
@@ -63,81 +73,97 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 case 0x00: // ADD or SUB Instruction
                     if (lowerNibble == 0x01) // ADD (A + X)
                     {
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " ADD X";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " ADD X";
+                        Accumulator = Execute.Add(Accumulator, X_Register);
                     }
                     else if (lowerNibble == 0x02) // ADD (A + IMM)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " ADD " + operand.ToString() + ", imm";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " ADD " + operand.ToString() + ", imm";
+                        Accumulator = Execute.Add(Accumulator, operand);
+
                     }
                     else if (lowerNibble == 0x03) // ADD (A + MEM)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " ADD " + operand.ToString() + ", mem";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " ADD " + operand.ToString() + ", mem";
+                        Accumulator = Execute.Add(Accumulator, Memory[operand]);
                     }
                     else if (lowerNibble == 0x09) // SUB (A - X)
                     {
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " SUB X";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " SUB X";
+                        Accumulator = Execute.Sub(Accumulator, X_Register);
                     }
                     else if(lowerNibble == 0x0A) // SUB (A - IMM)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " SUB " + operand.ToString() + ", imm";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " SUB " + operand.ToString() + ", imm";
+                        Accumulator = Execute.Sub(Accumulator, operand);
                     }
                     else if (lowerNibble == 0x0B) // SUB (A - MEM)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " SUB " + operand.ToString() + ", mem";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " SUB " + operand.ToString() + ", mem";
+                        Accumulator = Execute.Sub(Accumulator, Memory[operand]);
                     }
 
                     break;
                 case 0x01: // AND or OR Instruction
                     if (lowerNibble == 0x01) // AND (A & X)
                     {
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + "AND X";
+
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + "AND X";
+                        Accumulator = Execute.AND_OP(Accumulator, X_Register);
                     }
                     else if (lowerNibble == 0x02) // AND (A & IMM)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " AND  " + operand.ToString() + ", imm";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " AND  " + operand.ToString() + ", imm";
+                        Accumulator = Execute.AND_OP(Accumulator, operand);
                     }
                     else if (lowerNibble == 0x03) // AND (A & MEM)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " AND " + operand.ToString() + ", imm";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " AND " + operand.ToString() + ", imm";
+                        Accumulator = Execute.AND_OP(Accumulator, Memory[operand]);
                     }
                     else if (lowerNibble == 0x09) // OR (A | X)
                     {
-                        operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " OR  X";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " OR  X";
+                        Accumulator = Execute.OR_OP(Accumulator, X_Register);
                     }
                     else if (lowerNibble == 0x0A) // OR (A | IMM)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " OR " + operand.ToString() + ", imm";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " OR " + operand.ToString() + ", imm";
+                        Accumulator = Execute.OR_OP(Accumulator, operand);
                     }
                     else if (lowerNibble == 0x0B) // OR (A | MEM)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " OR " + operand.ToString() + ", mem";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " OR " + operand.ToString() + ", mem";
+                        Accumulator = Execute.OR_OP(Accumulator, Memory[operand]);
                     }
 
                     break;
                 case 0x02: // XOR or LDA Instruction
                     if (lowerNibble == 0x01) // XOR (A ^ X)
                     {
-                        operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " XOR X";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " XOR X";
+                        Accumulator = Execute.XOR_OP(Accumulator, X_Register);
+
                     }
                     else if (lowerNibble == 0x02) // XOR (A ^ IMM)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " XOR " + operand.ToString() + ", imm";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " XOR " + operand.ToString() + ", imm";
+                        Accumulator = Execute.XOR_OP(Accumulator, operand);
                     }
                     else if (lowerNibble == 0x03) // XOR (A ^ MEM)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " XOR " + operand.ToString() + ", mem";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " XOR " + operand.ToString() + ", mem";
+                        Accumulator = Execute.XOR_OP(Accumulator, Memory[operand]);
                     }
                     else if (lowerNibble == 0x09) // LDA (X -> A)
                     {
@@ -351,23 +377,55 @@ namespace Team_Instruction_Fetch_Decode_Execute
             return operand;
         }
         
-        
-        public void Execute(byte instructionBits, byte addressBits)
+        /*
+        public void Execute(byte byteToDecode)
         {
+            //string returnString = "";
+            ushort operand;
 
-            switch(instructionBits)
+            byte upperNibble = (byte)(byteToDecode >> 4);
+            byte lowerNibble = (byte)(byteToDecode & 0b00001111);
+
+            switch (instructionBits)
             {
                 case 0x00:
-                    if(addressBits == 0x01)
+                    if (lowerNibble == 0x01) // ADD (A + X)
                     {
-
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " ADD X";
+                    }
+                    else if (lowerNibble == 0x02) // ADD (A + IMM)
+                    {
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " ADD " + operand.ToString() + ", imm";
+                    }
+                    else if (lowerNibble == 0x03) // ADD (A + MEM)
+                    {
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " ADD " + operand.ToString() + ", mem";
+                    }
+                    else if (lowerNibble == 0x09) // SUB (A - X)
+                    {
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " SUB X";
+                    }
+                    else if (lowerNibble == 0x0A) // SUB (A - IMM)
+                    {
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " SUB " + operand.ToString() + ", imm";
+                    }
+                    else if (lowerNibble == 0x0B) // SUB (A - MEM)
+                    {
+                        operand = FetchOperand();
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " SUB " + operand.ToString() + ", mem";
                     }
 
                     break;
++
                 default:
                     break;
                        
             }
+
+        */
 
         }
         
