@@ -351,7 +351,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
             return operand;
         }
         
-        /*
+        
         public void Execute(byte instructionBits, byte addressBits)
         {
 
@@ -370,6 +370,6 @@ namespace Team_Instruction_Fetch_Decode_Execute
             }
 
         }
-        */
+        
     }
 }
