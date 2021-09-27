@@ -67,39 +67,37 @@ namespace Team_Instruction_Fetch_Decode_Execute
             byte upperNibble = (byte)(byteToDecode >> 4);
             byte lowerNibble = (byte)(byteToDecode & 0b00001111);
 
-            ProgramCounter++;
-
             switch (upperNibble)
             {
                 #region ADD or SUB Instruction
                 case 0x00: // ADD or SUB Instruction
                     if (lowerNibble == 0x01) // ADD (A + X)
                     {
-                        InstructionRep = (ProgramCounter-0x03).ToString() + " " + byteToDecode.ToString() + " ADD X";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " ADD X";
                         Accumulator = Execute.Add(Accumulator, X_Register);
                     }
                     else if (lowerNibble == 0x02) // ADD (A + IMM)
                     {
                         operand = FetchOperand();
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " ADD " + operand.ToString() + ", imm";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " ADD " + operand.ToString() + ", imm";
                         Accumulator = Execute.Add(Accumulator, operand);
 
                     }
                     else if (lowerNibble == 0x03) // ADD (A + MEM)
                     {
                         operand = FetchOperand();
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " ADD " + operand.ToString() + ", mem";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " ADD " + operand.ToString() + ", mem";
                         Accumulator = Execute.Add(Accumulator, Memory[operand]);
                     }
                     else if (lowerNibble == 0x09) // SUB (A - X)
                     {
-                        InstructionRep = (ProgramCounter - 0x01).ToString() + " " + byteToDecode.ToString() + " SUB X";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " SUB X";
                         Accumulator = Execute.Sub(Accumulator, X_Register);
                     }
                     else if(lowerNibble == 0x0A) // SUB (A - IMM)
                     {
                         operand = FetchOperand();
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " SUB " + operand.ToString() + ", imm";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " SUB " + operand.ToString() + ", imm";
                         Accumulator = Execute.Sub(Accumulator, operand);
                     }
                     else if (lowerNibble == 0x0B) // SUB (A - MEM)
@@ -116,36 +114,36 @@ namespace Team_Instruction_Fetch_Decode_Execute
                     if (lowerNibble == 0x01) // AND (A & X)
                     {
 
-                        InstructionRep = (ProgramCounter - 0x01).ToString() + " " + byteToDecode.ToString() + "AND X";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + "AND X";
                         Accumulator = Execute.AND_OP(Accumulator, X_Register);
                     }
                     else if (lowerNibble == 0x02) // AND (A & IMM)
                     {
                         operand = FetchOperand();
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " AND  " + operand.ToString() + ", imm";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " AND  " + operand.ToString() + ", imm";
                         Accumulator = Execute.AND_OP(Accumulator, operand);
                     }
                     else if (lowerNibble == 0x03) // AND (A & MEM)
                     {
                         operand = FetchOperand();
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " AND " + operand.ToString() + ", imm";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " AND " + operand.ToString() + ", imm";
                         Accumulator = Execute.AND_OP(Accumulator, Memory[operand]);
                     }
                     else if (lowerNibble == 0x09) // OR (A | X)
                     {
-                        InstructionRep = (ProgramCounter - 0x01).ToString() + " " + byteToDecode.ToString() + " OR  X";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " OR  X";
                         Accumulator = Execute.OR_OP(Accumulator, X_Register);
                     }
                     else if (lowerNibble == 0x0A) // OR (A | IMM)
                     {
                         operand = FetchOperand();
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " OR " + operand.ToString() + ", imm";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " OR " + operand.ToString() + ", imm";
                         Accumulator = Execute.OR_OP(Accumulator, operand);
                     }
                     else if (lowerNibble == 0x0B) // OR (A | MEM)
                     {
                         operand = FetchOperand();
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " OR " + operand.ToString() + ", mem";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " OR " + operand.ToString() + ", mem";
                         Accumulator = Execute.OR_OP(Accumulator, Memory[operand]);
                     }
 
@@ -155,37 +153,37 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 case 0x02: // XOR or LDA Instruction
                     if (lowerNibble == 0x01) // XOR (A ^ X)
                     {
-                        InstructionRep = (ProgramCounter - 0x01).ToString() + " " + byteToDecode.ToString() + " XOR X";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " XOR X";
                         Accumulator = Execute.XOR_OP(Accumulator, X_Register);
 
                     }
                     else if (lowerNibble == 0x02) // XOR (A ^ IMM)
                     {
                         operand = FetchOperand();
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " XOR " + operand.ToString() + ", imm";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " XOR " + operand.ToString() + ", imm";
                         Accumulator = Execute.XOR_OP(Accumulator, operand);
                     }
                     else if (lowerNibble == 0x03) // XOR (A ^ MEM)
                     {
                         operand = FetchOperand();
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " XOR " + operand.ToString() + ", mem";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " XOR " + operand.ToString() + ", mem";
                         Accumulator = Execute.XOR_OP(Accumulator, Memory[operand]);
                     }
                     else if (lowerNibble == 0x09) // LDA (X -> A)
                     {
-                        InstructionRep = (ProgramCounter - 0x01).ToString() + " " + byteToDecode.ToString() + " LDA X";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA X";
                         Accumulator = Execute.LDA (X_Register);
                     }
                     else if (lowerNibble == 0x0A) // LDA (IMM -> A)
                     {
                         operand = FetchOperand();
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", imm";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", imm";
                         Accumulator = Execute.LDA (operand);
                     }
                     else if (lowerNibble == 0x0B) // LDA (MEM -> A)
                     {
                         operand = FetchOperand();
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", mem";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", mem";
                         Accumulator = Execute.LDA (Memory[operand]);
                     }
 
@@ -195,7 +193,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 case 0x03: // LDX or STA Instruction
                     if (lowerNibble == 0x00) // LDX (A -> X)
                     {
-                        InstructionRep = (ProgramCounter - 0x01).ToString() + " " + byteToDecode.ToString() + " STA X";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " STA X";
                         X_Register = Execute.LDX (Accumulator);
                     }
                     else if (lowerNibble == 0x02) // LDX (IMM -> X)
@@ -207,20 +205,20 @@ namespace Team_Instruction_Fetch_Decode_Execute
                     else if (lowerNibble == 0x03) // LDX (MEM -> X)
                     {
                         operand = FetchOperand();
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", mem";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", mem";
                         X_Register = Execute.LDX (Memory[operand]);
                     }
                     else if (lowerNibble == 0x09) // STA (A -> X)
                     {
                         operand = FetchOperand();
-                        InstructionRep = (ProgramCounter - 0x01).ToString() + " " + byteToDecode.ToString() + " STA X, " + operand.ToString() + ", A";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " STA X, " + operand.ToString() + ", A";
                         X_Register = Execute.STA (Accumulator);
                     }
                     else if (lowerNibble == 0x0B) // STA (A -> MEM)
                     {
                         operand = FetchOperand();
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " STA  mem" + operand.ToString() + ", A";
-                        Memory[operand] = (byte)Execute.STA (Accumulator);
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " STA  mem" + operand.ToString() + ", A";
+                        Memory[operand] = Execute.STA (Accumulator);
                     }
 
                     break;
@@ -229,17 +227,17 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 case 0x04: // STX or BRT Instruction
                     if (lowerNibble == 0x00) // STX (X -> A)
                     {
-                        InstructionRep = (ProgramCounter - 0x01).ToString() + " " + byteToDecode.ToString() + " STX A";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " STX A";
                     }
                     else if (lowerNibble == 0x03) // STX (X -> MEM)
                     {
                         operand = FetchOperand();
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " STX " + operand.ToString() + ", mem";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " STX " + operand.ToString() + ", mem";
                     }
                     else if (lowerNibble == 0x0B) // BRT (MEM)
                     {
                         operand = FetchOperand();
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " BRT " + operand.ToString() + ", mem";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " BRT " + operand.ToString() + ", mem";
                     }
 
                     break;
@@ -249,21 +247,21 @@ namespace Team_Instruction_Fetch_Decode_Execute
                     if (lowerNibble == 0x03) // BRNT (MEM)
                     {
                         operand = FetchOperand();
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " BRNT " + operand.ToString() + ", mem";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " BRNT " + operand.ToString() + ", mem";
                     }
                     else if (lowerNibble == 0x09) // CPE (A to X)
                     {
-                        InstructionRep = (ProgramCounter - 0x01).ToString() + " " + byteToDecode.ToString() + " CPE X";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " CPE X";
                     }
                     else if (lowerNibble == 0x0A) // CPE (A to IMM)
                     {
                         operand = FetchOperand();
-                        return (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " CPE " + operand.ToString() + ", imm";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " CPE " + operand.ToString() + ", imm";
                     }
                     else if (lowerNibble == 0x0B) // CPE (A to MEM)
                     {
                         operand = FetchOperand();
-                        return (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " CPE " + operand.ToString() + ", mem";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " CPE " + operand.ToString() + ", mem";
                     }
 
                     break;
@@ -272,31 +270,31 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 case 0x06: // CPLT or CPLE Instruction
                     if (lowerNibble == 0x01) // CPLT (A to X)
                     {
-                        return (ProgramCounter - 0x01).ToString() + " " + byteToDecode.ToString() + " CPLT X";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " CPLT X";
                     }
                     else if (lowerNibble == 0x02) // CPLT (A to IMM)
                     {
                         operand = FetchOperand();
-                        return (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " CPLT " + operand.ToString() + ", imm";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " CPLT " + operand.ToString() + ", imm";
                     }
                     else if (lowerNibble == 0x03) // CPLT (A to MEM)
                     {
                         operand = FetchOperand();
-                        return (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " CPLT " + operand.ToString() + ", mem";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " CPLT " + operand.ToString() + ", mem";
                     }
                     else if (lowerNibble == 0x09) // CPLE (A to X)
                     {
-                        return (ProgramCounter - 0x01).ToString() + " " + byteToDecode.ToString() + " CPLE X";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " CPLE X";
                     }
                     else if (lowerNibble == 0x0A) // CPLE (A to IMM)
                     {
                         operand = FetchOperand();
-                        return (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " CPLE " + operand.ToString() + ", imm";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " CPLE " + operand.ToString() + ", imm";
                     }
                     else if (lowerNibble == 0x0B) // CPLE (A to MEM)
                     {
                         operand = FetchOperand();
-                        return (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " CPLE " + operand.ToString() + ", mem";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " CPLE " + operand.ToString() + ", mem";
                     }
 
                     break;
@@ -305,36 +303,36 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 case 0x07: // CPGT or CPGE Instruction
                     if (lowerNibble == 0x01) // CPGT (A to X)
                     {
-                        InstructionRep = (ProgramCounter - 0x01).ToString() + " " + byteToDecode.ToString ( ) + "CPGT X";
+                        InstructionRep = ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + "CPGT X";
                         bool result = Execute.CPGT (Accumulator, X_Register);
                     }
                     else if (lowerNibble == 0x02) // CPGT (A to IMM)
                     {
                         operand = FetchOperand ( );
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString ( ) + " CPGT " + operand.ToString ( ) + ", imm";
+                        InstructionRep = ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " CPGT " + operand.ToString ( ) + ", imm";
                         bool result = Execute.CPGT (Accumulator, operand);
                     }
                     else if (lowerNibble == 0x03) // CPGT (A to MEM)
                     {
                         operand = FetchOperand ( );
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString ( ) + " CPGT " + operand.ToString ( ) + ", mem";
+                        InstructionRep = ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " CPGT " + operand.ToString ( ) + ", mem";
                         bool result = Execute.CPGT (Accumulator, Memory[operand]);
                     }
                     else if (lowerNibble == 0x09) // CPGE (A to X)
                     {
-                        InstructionRep = (ProgramCounter - 0x01).ToString() + " " + byteToDecode.ToString ( ) + " CPGE X";
+                        InstructionRep = ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " CPGE X";
                         bool result = Execute.CPGE (Accumulator, X_Register);
                     }
                     else if (lowerNibble == 0x0A) // CPGE (A to IMM)
                     {
                         operand = FetchOperand ( );
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString ( ) + " CPGE " + operand.ToString ( ) + ", imm";
+                        InstructionRep = ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " CPGE " + operand.ToString ( ) + ", imm";
                         bool result = Execute.CPGE (Accumulator, operand);
                     }
                     else if (lowerNibble == 0x0B) // CPGE (A to MEM)
                     {
                         operand = FetchOperand ( );
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString ( ) + " CPGE " + operand.ToString ( ) + ", mem";
+                        InstructionRep = ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " CPGE " + operand.ToString ( ) + ", mem";
                         bool result = Execute.CPGE (Accumulator, Memory[operand]);
                     }
 
@@ -344,25 +342,25 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 case 0x08: // PUSH or POP Instruction
                     if (lowerNibble == 0x00) // PUSH (A)
                     {
-                        InstructionRep = (ProgramCounter - 0x01).ToString() + " " + byteToDecode.ToString() + " PUSH A";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " PUSH A";
                     }
                     else if (lowerNibble == 0x01) // PUSH (X)
                     {
-                        InstructionRep = (ProgramCounter - 0x01).ToString() + " " + byteToDecode.ToString() + " PUSH X";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " PUSH X";
                     }
                     else if (lowerNibble == 0x02) // PUSH (IMM)
                     {
                         operand = FetchOperand();
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " PUSH " + operand.ToString() + ", imm";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " PUSH " + operand.ToString() + ", imm";
                     }
                     else if (lowerNibble == 0x03) // PUSH (MEM)
                     {
                         operand = FetchOperand();
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " PUSH " + operand.ToString() + ", mem";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " PUSH " + operand.ToString() + ", mem";
                     }
                     else if (lowerNibble == 0x08) // POP
                     {
-                        InstructionRep = (ProgramCounter - 0x01).ToString() + " " + byteToDecode.ToString() + " POP";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " POP";
                     }
 
                     break;
@@ -371,22 +369,22 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 case 0x09: // NEG or NOT Instruction
                     if (lowerNibble == 0x00) // NEG(A)
 					          {
-						            InstructionRep = (ProgramCounter - 0x01).ToString() + " " + byteToDecode.ToString ( ) + " NEG A";
+						            InstructionRep = ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " NEG A";
                         Accumulator = Execute.NEG (Accumulator);
 					          }
 					          else if (lowerNibble == 0x01) // NEG(X)
                     {
-                        InstructionRep = (ProgramCounter - 0x01).ToString() + " " + byteToDecode.ToString ( ) + " NEG X";
+                        InstructionRep = ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " NEG X";
                         X_Register = Execute.NEG (X_Register);
                     }
                     else if (lowerNibble == 0x08) // NOT (A)
                     {
-                        InstructionRep = (ProgramCounter - 0x01).ToString() + " " + byteToDecode.ToString ( ) + " NOT A";
+                        InstructionRep = ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " NOT A";
                         Accumulator = Execute.NOT (Accumulator);
                     }
                     else if (lowerNibble == 0x09) // NOT (X)
                     {
-                        InstructionRep = (ProgramCounter - 0x01).ToString() + " " + byteToDecode.ToString ( ) + " NOT X";
+                        InstructionRep = ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " NOT X";
                         X_Register = Execute.NOT (X_Register);
                     }
 
@@ -397,7 +395,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
                     if (lowerNibble == 0x03) // UBR (MEM)
                     {
                         operand = FetchOperand();
-                        InstructionRep = (ProgramCounter - 0x03).ToString() + " " + byteToDecode.ToString() + " UBR " + operand.ToString() + ", mem";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " UBR " + operand.ToString() + ", mem";
                     }
 
                     break;
@@ -407,7 +405,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
                     if (lowerNibble == 0x0F) // YD (None)
                     {
                         IsStopped = 1;
-                        InstructionRep = (ProgramCounter-0x01).ToString() + " " + byteToDecode.ToString() + " YD";
+                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " YD";
                     }
 
                     break;
@@ -418,7 +416,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 #endregion
             }
 
-            return InstructionRep;
+            return " ";
 
             //Execute(instructionBits, addressBits);
         }
