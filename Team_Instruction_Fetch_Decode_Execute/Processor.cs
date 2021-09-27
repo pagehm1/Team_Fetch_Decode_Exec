@@ -198,9 +198,9 @@ namespace Team_Instruction_Fetch_Decode_Execute
                     }
                     else if (lowerNibble == 0x02) // LDX (IMM -> X)
                     {
-                        operand = FetchOperand();
-                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", imm";
-                        X_Register = Execute.LDX (operand);
+                        operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "LDA", "imm", true);
+
+                        X_Register = Execute.LDX(operand);
                     }
                     else if (lowerNibble == 0x03) // LDX (MEM -> X)
                     {
@@ -423,6 +423,8 @@ namespace Team_Instruction_Fetch_Decode_Execute
 
         public ushort FetchOperand()
         {
+            ProgramCounter++; // Increment the program counter
+
             ushort operand = (ushort)(Memory[ProgramCounter]); // Load in the first byte of the 16-bit operand
 
             operand <<= 8; // Perform a left shift 8 times to move the first byte to the upper bits of the operand
@@ -434,6 +436,31 @@ namespace Team_Instruction_Fetch_Decode_Execute
             ProgramCounter++; // Increment the program counter
 
             return operand; // Return the constructed 16-bit operand
+        }
+
+        public ushort ConstructInstructionRep(ushort currentPC, byte instructionOpcode, string instructionName, string addressingName, bool hasOperand)
+        {
+            ushort operand;
+            string tempInstructionRep;
+
+            tempInstructionRep = currentPC.ToString() + " " + instructionOpcode.ToString() + " " + instructionName + " ";
+
+            if (hasOperand)
+            {
+                operand = FetchOperand();
+
+                tempInstructionRep += operand.ToString() + ", " + addressingName;
+
+                InstructionRep = tempInstructionRep;
+
+                return operand;
+            }
+            else
+            {
+                InstructionRep = tempInstructionRep;
+
+                return 0;
+            }
         }
 
         /*
@@ -484,8 +511,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 
                     break;
                 default:
-                    break;
-                       
+                    break;           
         }
         */
     }
