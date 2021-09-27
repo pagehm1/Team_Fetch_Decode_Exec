@@ -28,7 +28,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
         {
             while (primaryProcessor.IsStopped != 1)
             {
-              //ListBox.Add(primaryProcessor.Decode(primaryProcessor.Memory[primaryProcessor.ProgramCounter])); // Add string we built about instruction into list box
+              outputListBox.Items.Add(primaryProcessor.Decode(primaryProcessor.Memory[primaryProcessor.ProgramCounter])); // Add string we built about instruction into list box
 
               //AccumulatorTextBox.Text = primaryProcessor.Accumulator;
             }
@@ -60,12 +60,8 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 }
 
                 binaryFileMaker(filePath);
-
-                //StartProc();
+                
             }
-
-
-
         }
 
         /// <summary>
@@ -88,7 +84,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
             filePath += ".bin";
             BinaryWriter binWriter = new BinaryWriter(File.Open(filePath, FileMode.Create, FileAccess.Write));
 
-            byte[] testArray = new byte[5] {0x32, 0x29, 0x01, 0x2B, 0xFF};
+            byte[] testArray = new byte[4] {0x32, 0x00, 0x29,0xFF};
 
             binWriter.Write(testArray);
 
@@ -116,6 +112,11 @@ namespace Team_Instruction_Fetch_Decode_Execute
             }
 
             BinaryTextBox.Text += " ";
+        }
+
+        private void decodeButton_Click_1(object sender, EventArgs e)
+        {
+            StartProc();
         }
     }
 }

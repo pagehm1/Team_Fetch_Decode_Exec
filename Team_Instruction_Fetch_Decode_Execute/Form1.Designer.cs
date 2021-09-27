@@ -60,6 +60,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
             this.statisticsLabel = new System.Windows.Forms.Label();
             this.addressingLabel = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
+            this.decodeButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -108,7 +109,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
             this.BinaryTextBox.Location = new System.Drawing.Point(12, 260);
             this.BinaryTextBox.Multiline = true;
             this.BinaryTextBox.Name = "BinaryTextBox";
-            this.BinaryTextBox.Size = new System.Drawing.Size(195, 290);
+            this.BinaryTextBox.Size = new System.Drawing.Size(195, 251);
             this.BinaryTextBox.TabIndex = 2;
             // 
             // outputListBox
@@ -116,7 +117,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
             this.outputListBox.FormattingEnabled = true;
             this.outputListBox.Location = new System.Drawing.Point(226, 260);
             this.outputListBox.Name = "outputListBox";
-            this.outputListBox.Size = new System.Drawing.Size(195, 290);
+            this.outputListBox.Size = new System.Drawing.Size(195, 251);
             this.outputListBox.TabIndex = 3;
             // 
             // statisticsTextBox
@@ -327,11 +328,22 @@ namespace Team_Instruction_Fetch_Decode_Execute
             this.label14.TabIndex = 27;
             this.label14.Text = "Flags:";
             // 
+            // decodeButton
+            // 
+            this.decodeButton.Location = new System.Drawing.Point(162, 517);
+            this.decodeButton.Name = "decodeButton";
+            this.decodeButton.Size = new System.Drawing.Size(111, 44);
+            this.decodeButton.TabIndex = 28;
+            this.decodeButton.Text = "Decode/Execute";
+            this.decodeButton.UseVisualStyleBackColor = true;
+            this.decodeButton.Click += new System.EventHandler(this.decodeButton_Click_1);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(866, 562);
+            this.Controls.Add(this.decodeButton);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.addressingLabel);
             this.Controls.Add(this.statisticsLabel);
@@ -400,6 +412,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
         private System.Windows.Forms.Label statisticsLabel;
         private System.Windows.Forms.Label addressingLabel;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Button decodeButton;
     }
 }
 
