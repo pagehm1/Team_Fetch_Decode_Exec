@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -171,18 +171,20 @@ namespace Team_Instruction_Fetch_Decode_Execute
                     }
                     else if (lowerNibble == 0x09) // LDA (X -> A)
                     {
-                        operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA X";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA X";
+                        Accumulator = Execute.LDA (X_Register);
                     }
                     else if (lowerNibble == 0x0A) // LDA (IMM -> A)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", imm";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", imm";
+                        Accumulator = Execute.LDA (operand);
                     }
                     else if (lowerNibble == 0x0B) // LDA (MEM -> A)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", mem";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", mem";
+                        Accumulator = Execute.LDA (Memory[operand]);
                     }
 
                     break;
@@ -191,28 +193,32 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 case 0x03: // LDX or STA Instruction
                     if (lowerNibble == 0x00) // LDX (A -> X)
                     {
-                        operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " STA X";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " STA X";
+                        X_Register = Execute.LDX (Accumulator);
                     }
                     else if (lowerNibble == 0x02) // LDX (IMM -> X)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", imm";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", imm";
+                        X_Register = Execute.LDX (operand);
                     }
                     else if (lowerNibble == 0x03) // LDX (MEM -> X)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", mem";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", mem";
+                        X_Register = Execute.LDX (Memory[operand]);
                     }
                     else if (lowerNibble == 0x09) // STA (A -> X)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " STA X, " + operand.ToString() + ", A";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " STA X, " + operand.ToString() + ", A";
+                        X_Register = Execute.STA (Accumulator);
                     }
                     else if (lowerNibble == 0x0B) // STA (A -> MEM)
                     {
                         operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " STA  mem" + operand.ToString() + ", A";
+                        InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " STA  mem" + operand.ToString() + ", A";
+                        Memory[operand] = Execute.STA (Accumulator);
                     }
 
                     break;
@@ -297,31 +303,37 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 case 0x07: // CPGT or CPGE Instruction
                     if (lowerNibble == 0x01) // CPGT (A to X)
                     {
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + "CPGT X";
+                        InstructionRep = ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + "CPGT X";
+                        bool result = Execute.CPGT (Accumulator, X_Register);
                     }
                     else if (lowerNibble == 0x02) // CPGT (A to IMM)
                     {
-                        operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " CPGT " + operand.ToString() + ", imm";
+                        operand = FetchOperand ( );
+                        InstructionRep = ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " CPGT " + operand.ToString ( ) + ", imm";
+                        bool result = Execute.CPGT (Accumulator, operand);
                     }
                     else if (lowerNibble == 0x03) // CPGT (A to MEM)
                     {
-                        operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " CPGT " + operand.ToString() + ", mem";
+                        operand = FetchOperand ( );
+                        InstructionRep = ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " CPGT " + operand.ToString ( ) + ", mem";
+                        bool result = Execute.CPGT (Accumulator, Memory[operand]);
                     }
                     else if (lowerNibble == 0x09) // CPGE (A to X)
                     {
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " CPGE X";
+                        InstructionRep = ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " CPGE X";
+                        bool result = Execute.CPGE (Accumulator, X_Register);
                     }
                     else if (lowerNibble == 0x0A) // CPGE (A to IMM)
                     {
-                        operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " CPGE " + operand.ToString() + ", imm";
+                        operand = FetchOperand ( );
+                        InstructionRep = ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " CPGE " + operand.ToString ( ) + ", imm";
+                        bool result = Execute.CPGE (Accumulator, operand);
                     }
                     else if (lowerNibble == 0x0B) // CPGE (A to MEM)
                     {
-                        operand = FetchOperand();
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " CPGE " + operand.ToString() + ", mem";
+                        operand = FetchOperand ( );
+                        InstructionRep = ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " CPGE " + operand.ToString ( ) + ", mem";
+                        bool result = Execute.CPGE (Accumulator, Memory[operand]);
                     }
 
                     break;
@@ -355,21 +367,25 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 #endregion
                 #region NEG or NOT Instruction
                 case 0x09: // NEG or NOT Instruction
-                    if (lowerNibble == 0x00) // NEG (A)
+                    if (lowerNibble == 0x00) // NEG(A)
+					          {
+						            InstructionRep = ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " NEG A";
+                        Accumulator = Execute.NEG (Accumulator);
+					          }
+					          else if (lowerNibble == 0x01) // NEG(X)
                     {
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " NEG A";
-                    }
-                    else if (lowerNibble == 0x01) // NEG (X)
-                    {
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " NEG X";
+                        InstructionRep = ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " NEG X";
+                        X_Register = Execute.NEG (X_Register);
                     }
                     else if (lowerNibble == 0x08) // NOT (A)
                     {
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " NOT A";
+                        InstructionRep = ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " NOT A";
+                        Accumulator = Execute.NOT (Accumulator);
                     }
                     else if (lowerNibble == 0x09) // NOT (X)
                     {
-                        return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " NOT X";
+                        InstructionRep = ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " NOT X";
+                        X_Register = Execute.NOT (X_Register);
                     }
 
                     break;

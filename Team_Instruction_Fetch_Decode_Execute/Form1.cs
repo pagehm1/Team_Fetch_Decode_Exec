@@ -56,12 +56,16 @@ namespace Team_Instruction_Fetch_Decode_Execute
 
                     primaryProcessor.PopulateMemory(instructionPiece[0]);
                     populateBinaryTextBox(instructionPiece[0]);
+
                 }
 
                 binaryFileMaker(filePath);
 
                 //StartProc();
             }
+
+
+
         }
 
         /// <summary>
