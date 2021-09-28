@@ -8,6 +8,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 {
     public class Processor
     {
+        Statistics stats = new Statistics();
         public byte[] Memory { get; set; }
 
         public ushort Accumulator { get; set; }
@@ -75,74 +76,108 @@ namespace Team_Instruction_Fetch_Decode_Execute
                     {
                         InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " ADD X";
                         Accumulator = Execute.Add(Accumulator, X_Register);
+                        stats.arithmeticInstructions++;
+                        stats.xRegisterAddressing++;
+                        stats.totalInstructions++;
                     }
                     else if (lowerNibble == 0x02) // ADD (A + IMM)
                     {
                         operand = FetchOperand();
                         InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " ADD " + operand.ToString() + ", imm";
                         Accumulator = Execute.Add(Accumulator, operand);
-
+                        stats.immediateAddressing++;
+                        stats.totalInstructions++;
+                        stats.arithmeticInstructions++;
                     }
                     else if (lowerNibble == 0x03) // ADD (A + MEM)
                     {
                         operand = FetchOperand();
                         InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " ADD " + operand.ToString() + ", mem";
                         Accumulator = Execute.Add(Accumulator, Memory[operand]);
+                        stats.memoryAddressing++;
+                        stats.totalInstructions++;
+                        stats.arithmeticInstructions++;
                     }
                     else if (lowerNibble == 0x09) // SUB (A - X)
                     {
                         InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " SUB X";
                         Accumulator = Execute.Sub(Accumulator, X_Register);
+                        stats.xRegisterAddressing++;
+                        stats.totalInstructions++;
+                        stats.arithmeticInstructions++;
                     }
                     else if(lowerNibble == 0x0A) // SUB (A - IMM)
                     {
                         operand = FetchOperand();
                         InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " SUB " + operand.ToString() + ", imm";
                         Accumulator = Execute.Sub(Accumulator, operand);
+                        stats.immediateAddressing++;
+                        stats.totalInstructions++;
+                        stats.arithmeticInstructions++;
                     }
                     else if (lowerNibble == 0x0B) // SUB (A - MEM)
                     {
                         operand = FetchOperand();
                         InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " SUB " + operand.ToString() + ", mem";
                         Accumulator = Execute.Sub(Accumulator, Memory[operand]);
+                        stats.memoryAddressing++;
+                        stats.totalInstructions++;
+                        stats.arithmeticInstructions++;
                     }
 
                     break;
                 case 0x01: // AND or OR Instruction
                     if (lowerNibble == 0x01) // AND (A & X)
                     {
-
                         InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + "AND X";
                         Accumulator = Execute.AND_OP(Accumulator, X_Register);
+                        stats.logicInstructions++;
+                        stats.xRegisterAddressing++;
+                        stats.totalInstructions++;
                     }
                     else if (lowerNibble == 0x02) // AND (A & IMM)
                     {
                         operand = FetchOperand();
                         InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " AND  " + operand.ToString() + ", imm";
                         Accumulator = Execute.AND_OP(Accumulator, operand);
+                        stats.logicInstructions++;
+                        stats.immediateAddressing++;
+                        stats.totalInstructions++;
                     }
                     else if (lowerNibble == 0x03) // AND (A & MEM)
                     {
                         operand = FetchOperand();
                         InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " AND " + operand.ToString() + ", imm";
                         Accumulator = Execute.AND_OP(Accumulator, Memory[operand]);
+                        stats.logicInstructions++;
+                        stats.memoryAddressing++;
+                        stats.totalInstructions++;
                     }
                     else if (lowerNibble == 0x09) // OR (A | X)
                     {
                         InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " OR  X";
                         Accumulator = Execute.OR_OP(Accumulator, X_Register);
+                        stats.logicInstructions++;
+                        stats.xRegisterAddressing++;
+                        stats.totalInstructions++;
                     }
                     else if (lowerNibble == 0x0A) // OR (A | IMM)
                     {
                         operand = FetchOperand();
                         InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " OR " + operand.ToString() + ", imm";
                         Accumulator = Execute.OR_OP(Accumulator, operand);
+                        stats.logicInstructions++;
+                        stats.immediateAddressing++;
+                        stats.totalInstructions++;
                     }
                     else if (lowerNibble == 0x0B) // OR (A | MEM)
                     {
                         operand = FetchOperand();
                         InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " OR " + operand.ToString() + ", mem";
                         Accumulator = Execute.OR_OP(Accumulator, Memory[operand]);
+                        stats.logicInstructions++;
+                        stats.memoryAddressing++;
+                        stats.totalInstructions++;
                     }
 
                     break;
@@ -151,33 +186,48 @@ namespace Team_Instruction_Fetch_Decode_Execute
                     {
                         InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " XOR X";
                         Accumulator = Execute.XOR_OP(Accumulator, X_Register);
-
+                        stats.xRegisterAddressing++;
+                        stats.totalInstructions++;
+                        stats.logicInstructions++;
                     }
                     else if (lowerNibble == 0x02) // XOR (A ^ IMM)
                     {
                         operand = FetchOperand();
                         InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " XOR " + operand.ToString() + ", imm";
                         Accumulator = Execute.XOR_OP(Accumulator, operand);
+                        stats.immediateAddressing++;
+                        stats.totalInstructions++;
+                        stats.logicInstructions++;
                     }
                     else if (lowerNibble == 0x03) // XOR (A ^ MEM)
                     {
                         operand = FetchOperand();
                         InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " XOR " + operand.ToString() + ", mem";
                         Accumulator = Execute.XOR_OP(Accumulator, Memory[operand]);
+                        stats.memoryAddressing++;
+                        stats.totalInstructions++;
+                        stats.logicInstructions++;
                     }
                     else if (lowerNibble == 0x09) // LDA (X -> A)
                     {
                         operand = FetchOperand();
+                        stats.totalInstructions++;
+                        stats.accumulatorAddressing++;
+
                         return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA X";
                     }
                     else if (lowerNibble == 0x0A) // LDA (IMM -> A)
                     {
                         operand = FetchOperand();
+                        stats.totalInstructions++;
+                        stats.accumulatorAddressing++;
                         return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", imm";
                     }
                     else if (lowerNibble == 0x0B) // LDA (MEM -> A)
                     {
                         operand = FetchOperand();
+                        stats.totalInstructions++;
+                        stats.accumulatorAddressing++;
                         return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", mem";
                     }
 
@@ -186,26 +236,36 @@ namespace Team_Instruction_Fetch_Decode_Execute
                     if (lowerNibble == 0x00) // LDX (A -> X)
                     {
                         operand = FetchOperand();
+                        stats.totalInstructions++;
+                        stats.xRegisterAddressing++;
                         return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " STA X";
                     }
                     else if (lowerNibble == 0x02) // LDX (IMM -> X)
                     {
                         operand = FetchOperand();
+                        stats.totalInstructions++;
+                        stats.xRegisterAddressing++;
                         return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", imm";
                     }
                     else if (lowerNibble == 0x03) // LDX (MEM -> X)
                     {
                         operand = FetchOperand();
+                        stats.totalInstructions++;
+                        stats.xRegisterAddressing++;
                         return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", mem";
                     }
                     else if (lowerNibble == 0x09) // STA (A -> X)
                     {
                         operand = FetchOperand();
+                        stats.totalInstructions++;
+                        stats.xRegisterAddressing++;
                         return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " STA X, " + operand.ToString() + ", A";
                     }
                     else if (lowerNibble == 0x0B) // STA (A -> MEM)
                     {
                         operand = FetchOperand();
+                        stats.totalInstructions++;
+                        stats.memoryAddressing++;
                         return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " STA  mem" + operand.ToString() + ", A";
                     }
 
@@ -251,7 +311,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
                     }
                     else if (lowerNibble == 0x02) // CPLT (A to IMM)
                     {
-
+                        
                     }
                     else if (lowerNibble == 0x03) // CPLT (A to MEM)
                     {
@@ -263,7 +323,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
                     }
                     else if (lowerNibble == 0x0A) // CPLE (A to IMM)
                     {
-
+                       
                     }
                     else if (lowerNibble == 0x0B) // CPLE (A to MEM)
                     {
@@ -274,30 +334,47 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 case 0x07: // CPGT or CPGE Instruction
                     if (lowerNibble == 0x01) // CPGT (A to X)
                     {
+                        stats.totalInstructions++;
+                        stats.xRegisterAddressing++;
+                        stats.controlFlowInstructions++;
                         return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + "CPGT X";
                     }
                     else if (lowerNibble == 0x02) // CPGT(A to IMM)
                     {
                         operand = FetchOperand ( );
+                        stats.immediateAddressing++;
+                        stats.totalInstructions++;
+                        stats.controlFlowInstructions++;
                         return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " CPGT " + operand.ToString ( ) + ", imm";
                     }
                     else if (lowerNibble == 0x03) // CPGT(A to MEM)
                     {
                         operand = FetchOperand ( );
+                        stats.totalInstructions++;
+                        stats.controlFlowInstructions++;
                         return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " CPGT " + operand.ToString ( ) + ", mem";
                     }
                     else if (lowerNibble == 0x09) // CPGE(A to X)
                     {
+                        stats.totalInstructions++;
+                        stats.xRegisterAddressing++;
+                        stats.controlFlowInstructions++;
                         return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " CPGE X";
                     }
                     else if (lowerNibble == 0x0A) // CPGE(A to IMM)
                     {
                         operand = FetchOperand ( );
+                        stats.totalInstructions++;
+                        stats.immediateAddressing++;
+                        stats.controlFlowInstructions++;
                         return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " CPGE " + operand.ToString ( ) + ", imm";
                     }
                     else if (lowerNibble == 0x0B) // CPGE (A to MEM)
                     {
                         operand = FetchOperand ( );
+                        stats.memoryAddressing++;
+                        stats.totalInstructions++;
+                        stats.controlFlowInstructions++;
                         return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " CPGE " + operand.ToString ( ) + ", mem";
                     }
 
@@ -305,24 +382,33 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 case 0x08: // PUSH or POP Instruction
                     if (lowerNibble == 0x00) // PUSH (A)
                     {
+                        stats.totalInstructions++;
+                        stats.accumulatorAddressing++;
                         return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " PUSH A";
                     }
                     else if (lowerNibble == 0x01) // PUSH (X)
                     {
+                        stats.totalInstructions++;
+                        stats.xRegisterAddressing++;
                         return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " PUSH X";
                     }
                     else if (lowerNibble == 0x02) // PUSH (IMM)
                     {
                         operand = FetchOperand ( );
+                        stats.immediateAddressing++;
+                        stats.totalInstructions++;
                         return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " PUSH " + operand.ToString ( ) + ", imm";
                     }
                     else if (lowerNibble == 0x03) // PUSH (MEM)
                     {
                         operand = FetchOperand ( );
+                        stats.totalInstructions++;
+                        stats.memoryAddressing++;
                         return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " PUSH " + operand.ToString ( ) + ", mem";
                     }
                     else if (lowerNibble == 0x08) // POP
                     {
+                        stats.totalInstructions++;
                         return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " POP";
                     }
 
@@ -330,18 +416,30 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 case 0x09: // NEG or NOT Instruction
                     if (lowerNibble == 0x00) // NEG(A)
                     {
+                        stats.totalInstructions++;
+                        stats.accumulatorAddressing++;
+                        stats.logicInstructions++;
                         return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " NEG A";
                     }
                     else if (lowerNibble == 0x01) // NEG(X)
                     {
+                        stats.totalInstructions++;
+                        stats.xRegisterAddressing++;
+                        stats.logicInstructions++;
                         return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " NEG X";
                     }
                     else if (lowerNibble == 0x08) // NOT(A)
                     {
+                        stats.totalInstructions++;
+                        stats.accumulatorAddressing++;
+                        stats.logicInstructions++;
                         return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " NOT A";
                     }
                     else if (lowerNibble == 0x09) // NOT(X)
                     {
+                        stats.totalInstructions++;
+                        stats.xRegisterAddressing++;
+                        stats.logicInstructions++;
                         return ProgramCounter.ToString ( ) + " " + byteToDecode.ToString ( ) + " NOT X";
                     }
 
@@ -350,6 +448,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
                     if (lowerNibble == 0x0F) // YD
                     {
                         IsStopped = 1;
+                        stats.totalInstructions++;
                         return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " YD";
                     }
 

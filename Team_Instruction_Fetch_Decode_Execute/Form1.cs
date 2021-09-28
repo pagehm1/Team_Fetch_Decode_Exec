@@ -117,5 +117,10 @@ namespace Team_Instruction_Fetch_Decode_Execute
 
             BinaryTextBox.Text += " ";
         }
+
+        public void populateStatisticsListBox(string str)
+        {
+            //This will but each stat into the box on the gui, which will come from the statistics class.
+        }
     }
 }
