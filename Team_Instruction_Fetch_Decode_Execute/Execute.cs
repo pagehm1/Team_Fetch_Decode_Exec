@@ -35,22 +35,22 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			return (ushort)(registerOne ^ operand);
 		}
 
-		public static ushort LDA (ushort operand)
+		public static ushort LDA(ushort operand)
 		{
 			return (ushort) operand;
 		}
 
-		public static ushort LDX (ushort operand)
+		public static ushort LDX(ushort operand)
 		{
 			return (ushort) operand;
 		}
 
-		public static ushort STA (ushort operand)
+		public static ushort STA(ushort operand)
 		{
 			return (ushort) operand;
 		}
 
-		public static bool CPGT (ushort registerOne, ushort operand)
+		public static bool CPGT(ushort registerOne, ushort operand)
 		{
 			if (registerOne > operand)
 			{
@@ -62,7 +62,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			}
 		}
 
-		public static bool CPGE (ushort registerOne, ushort operand)
+		public static bool CPGE(ushort registerOne, ushort operand)
 		{
 			if (registerOne >= operand)
 			{
@@ -74,12 +74,12 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			}
 		}
 
-		public static ushort NEG (ushort register)
+		public static ushort NEG(ushort register)
 		{
 			return (ushort) (register * -1);
 		}
 
-		public static ushort NOT (ushort register)
+		public static ushort NOT(ushort register)
 		{
 			return (ushort) ~register;
 		}
