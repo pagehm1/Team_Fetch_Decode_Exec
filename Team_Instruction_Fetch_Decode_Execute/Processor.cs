@@ -60,7 +60,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 
 		public void UpdateRegistersAndFlags()
 		{
-			 
+
 		}
 
 		public string Decode(byte byteToDecode)
@@ -100,7 +100,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 
 						Accumulator = Execute.Sub(Accumulator, X_Register);
 					}
-					else if(lowerNibble == 0x0A) // SUB (A - IMM)
+					else if (lowerNibble == 0x0A) // SUB (A - IMM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "SUB", "imm", true);
 
@@ -418,12 +418,12 @@ namespace Team_Instruction_Fetch_Decode_Execute
 				default:
 					// Insert code to handle bad instruction opcode?
 					break;
-				#endregion
+					#endregion
 			}
 
 			Form.UpdateRegisters();
 			Form.UpdateFlags();
-			
+
 			return " ";
 		}
 

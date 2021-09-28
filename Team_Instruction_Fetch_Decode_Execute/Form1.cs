@@ -18,7 +18,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 
 		public Form1()
 		{
-			primaryProcessor = new Processor(this);
+			primaryProcessor = new Processor();
 			position = 0;
 			InitializeComponent();
 		}
@@ -117,10 +117,6 @@ namespace Team_Instruction_Fetch_Decode_Execute
         {
             StartProc();
         }
-    }
-}
-			BinaryTextBox.Text += " ";
-		}
 
 		public void UpdateRegisters()
 		{
@@ -137,5 +133,6 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			tbZeroFlag.Text = primaryProcessor.ZeroFlag.ToString();
 			tbTruthFlag.Text = primaryProcessor.TrueFlag.ToString();
 		}
+
 	}
 }
