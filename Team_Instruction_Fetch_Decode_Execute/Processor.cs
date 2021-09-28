@@ -8,6 +8,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 {
     public class Processor
     {
+        public Form1 Form;
         public byte[] Memory { get; set; }
 
         public ushort Accumulator { get; set; }
@@ -35,8 +36,9 @@ namespace Team_Instruction_Fetch_Decode_Execute
 
         public List<Object> updatedItems { get; set; }
 
-        public Processor()
+        public Processor(Form1 form)
         {
+            Form = form;
             Memory = new byte[1048576];
             Accumulator = 0x0000;
             X_Register = 0x0000;
@@ -54,9 +56,9 @@ namespace Team_Instruction_Fetch_Decode_Execute
             counter++;
         }
 
-        public void updateRegistersAndFlags()
+        public void UpdateRegistersAndFlags()
         {
-
+             
         }
 
         public string Decode(byte byteToDecode)
@@ -218,7 +220,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
                     {
                         operand = FetchOperand();
                         InstructionRep = ProgramCounter.ToString() + " " + byteToDecode.ToString() + " STA  mem" + operand.ToString() + ", A";
-                        Memory[operand] = Execute.STA (Accumulator);
+                        //Memory[operand] = Execute.STA (Accumulator);
                     }
 
                     break;
@@ -412,16 +414,18 @@ namespace Team_Instruction_Fetch_Decode_Execute
                 #endregion
                 #region Default
                 default:
+                    // Insert code to handle bad instruction opcode?
                     break;
                 #endregion
             }
 
+            Form.UpdateRegisters ( );
+            Form.UpdateFlags ( );
+            
             return " ";
-
-            //Execute(instructionBits, addressBits);
         }
 
-        public ushort FetchOperand()
+		public ushort FetchOperand()
         {
             ProgramCounter++; // Increment the program counter
 
