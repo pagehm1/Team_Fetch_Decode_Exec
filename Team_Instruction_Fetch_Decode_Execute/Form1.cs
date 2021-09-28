@@ -18,7 +18,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 
 		public Form1()
 		{
-			primaryProcessor = new Processor();
+			primaryProcessor = new Processor(this);
 			position = 0;
 			InitializeComponent();
 		}
