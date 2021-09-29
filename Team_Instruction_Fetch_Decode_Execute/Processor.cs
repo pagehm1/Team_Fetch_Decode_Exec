@@ -218,7 +218,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
                         operand = FetchOperand();
                         stats.totalInstructions++;
                         stats.accumulatorAddressing++;
-
+                        stats.controlFlowInstructions++;
                         return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA X";
                     }
                     else if (lowerNibble == 0x0A) // LDA (IMM -> A)
@@ -226,6 +226,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
                         operand = FetchOperand();
                         stats.totalInstructions++;
                         stats.accumulatorAddressing++;
+                        stats.memoryInstructions++;
                         return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", imm";
                     }
                     else if (lowerNibble == 0x0B) // LDA (MEM -> A)
@@ -233,6 +234,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
                         operand = FetchOperand();
                         stats.totalInstructions++;
                         stats.accumulatorAddressing++;
+                        stats.memoryInstructions++;
                         return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", mem";
                     }
 
@@ -243,6 +245,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
                         operand = FetchOperand();
                         stats.totalInstructions++;
                         stats.xRegisterAddressing++;
+                        stats.memoryInstructions++;
                         return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " STA X";
                     }
                     else if (lowerNibble == 0x02) // LDX (IMM -> X)
@@ -250,6 +253,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
                         operand = FetchOperand();
                         stats.totalInstructions++;
                         stats.xRegisterAddressing++;
+                        stats.memoryInstructions++;
                         return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", imm";
                     }
                     else if (lowerNibble == 0x03) // LDX (MEM -> X)
@@ -257,6 +261,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
                         operand = FetchOperand();
                         stats.totalInstructions++;
                         stats.xRegisterAddressing++;
+                        stats.memoryInstructions++;
                         return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " LDA " + operand.ToString() + ", mem";
                     }
                     else if (lowerNibble == 0x09) // STA (A -> X)
@@ -264,6 +269,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
                         operand = FetchOperand();
                         stats.totalInstructions++;
                         stats.xRegisterAddressing++;
+                        stats.memoryInstructions++;
                         return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " STA X, " + operand.ToString() + ", A";
                     }
                     else if (lowerNibble == 0x0B) // STA (A -> MEM)
@@ -271,6 +277,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
                         operand = FetchOperand();
                         stats.totalInstructions++;
                         stats.memoryAddressing++;
+                        stats.memoryInstructions++;
                         return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " STA  mem" + operand.ToString() + ", A";
                     }
 
@@ -460,7 +467,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
                     break;
                 default:
 
-                    break;
+                    return "";
             }
             return "";
             //Execute(instructionBits, addressBits);

@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 namespace Team_Instruction_Fetch_Decode_Execute
 {
     class Statistics
-
     {
-        Processor p = new Processor();
-        Form1 form = new Form1();
+        Form1 form;
         public int totalInstructions { get; set; }
         public int unaryInstructions { get; set; }
         public int nonUnaryInstructions { get; set; }
