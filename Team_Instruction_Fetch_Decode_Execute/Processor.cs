@@ -426,6 +426,8 @@ namespace Team_Instruction_Fetch_Decode_Execute
 						StackRegister++;
 						Memory[524288 + StackRegister] = lowerNibble;
 						StackRegister++;
+
+						ProcessorStats.accumulatorAddressing++;
 					}
 					else if (lowerNibble == 0x01) // PUSH (X)
 					{
@@ -477,14 +479,12 @@ namespace Team_Instruction_Fetch_Decode_Execute
 						Accumulator = Memory[524288 + StackRegister];
 
 						Accumulator <<= 8;
-
 						StackRegister--;
-						
 						Accumulator += Memory[524288 + StackRegister];
-
 						Accumulator = (ushort)((Accumulator << 8) | (Accumulator >> (16 - 8)));
-
 						StackRegister--;
+						ProcessorStats.accumulatorAddressing++;
+
 					}
 					ProcessorStats.unaryInstructions++;
 					break;
@@ -496,6 +496,8 @@ namespace Team_Instruction_Fetch_Decode_Execute
 						ConstructInstructionRep(ProgramCounter, byteToDecode, "NEG A", " ", false, false);
 
 						Accumulator = Execute.NEG(Accumulator);
+						ProcessorStats.accumulatorAddressing++;
+
 					}
 					else if (lowerNibble == 0x01) // NEG (X)
 					{
@@ -508,6 +510,8 @@ namespace Team_Instruction_Fetch_Decode_Execute
 						ConstructInstructionRep(ProgramCounter, byteToDecode, "NOT A", " ", false, false);
 
 						Accumulator = Execute.NOT(Accumulator);
+						ProcessorStats.accumulatorAddressing++;
+
 					}
 					else if (lowerNibble == 0x09) // NOT (X)
 					{
