@@ -596,17 +596,19 @@ namespace Team_Instruction_Fetch_Decode_Execute
 
 			uint operand = (uint)(Memory[ProgramCounter]); // Load in the first byte of the 16-bit operand
 
+			operand <<= 8; // Perform a left shift 8 times to move the first byte to the upper bits of the operand
 
-			for(int i = 0; i < 2; i++)
-            {
-				operand <<= 8; // Perform a left shift 8 times to move the first byte to the upper bits of the operand
+			ProgramCounter++; // Increment the program counter
 
-				ProgramCounter++; // Increment the program counter
+			operand += (uint)(Memory[ProgramCounter]); // Load in the second byte of the 16-bit operand to the lower bits of the operand
 
-				operand += (uint)(Memory[ProgramCounter]); // Load in the second byte of the 16-bit operand to the lower bits of the operand
+			operand <<= 8; // Perform a left shift 8 times to move the first byte to the upper bits of the operand
 
-				ProgramCounter++; // Increment the program counter
-			}
+			ProgramCounter++; // Increment the program counter
+
+			operand += (uint)(Memory[ProgramCounter]); // Load in the second byte of the 16-bit operand to the lower bits of the operand
+
+			ProgramCounter++; // Increment the program counter
 
 			return operand; // Return the constructed 16-bit operand
 		}
@@ -622,9 +624,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			{
 				if (isMemoryAddress)
 				{
-					operand = FetchMemoryOperand(); // Fetch address
-
-					operand = Memory[operand]; // Fetch value at that address
+					operand = FetchMemoryOperand();
 
 					tempInstructionRep += operand.ToString() + ", " + addressingName;
 
