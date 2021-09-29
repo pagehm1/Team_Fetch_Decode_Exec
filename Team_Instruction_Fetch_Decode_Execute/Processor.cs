@@ -1,3 +1,15 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//	Project:           Project 1 - Instruction Set
+//	File Name:         Processor.cs
+//	Description:       Emulates a computer processor that reads in and executes instructions.
+//	Course:            CSCI 4717 - Computer Architecture	
+//	Author:            Hunter Page, pagehm1@etsu.edu, Dept. of Computing, East Tennessee State University
+//	Created:           Monday, September 13, 2021
+//	Copyright:         Hunter Page, Zakk Trent, Micah DePetro, and Brett Hamilton, 2021
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +18,9 @@ using System.Threading.Tasks;
 
 namespace Team_Instruction_Fetch_Decode_Execute
 {
+	/// <summary>
+	/// Emulates a computer processor.
+	/// </summary>
 	public class Processor
 	{
 		#region Processor Properties
@@ -40,7 +55,11 @@ namespace Team_Instruction_Fetch_Decode_Execute
 		public Statistics ProcessorStats { get; set; }
 		#endregion
 
-		public Processor(Form1 form)
+		/// <summary>
+		/// Constructor that makes a new processor with a Form.
+		/// </summary>
+		/// <param name="form">The GUI Form.</param>
+		public Processor (Form1 form)
 		{
 			Form = form;
 			Memory = new byte[1048576];
@@ -53,20 +72,24 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			ZeroFlag = false;
 			TrueFlag = false;
 
-			ProcessorStats = new Statistics();
+			ProcessorStats = new Statistics(form);
 		}
 
+		/// <summary>
+		/// Fills the memory array.
+		/// </summary>
+		/// <param name="byteToInsert">Byte going into memory.</param>
 		public void PopulateMemory(byte byteToInsert)
 		{
 			Memory[counter] = byteToInsert;
 			counter++;
 		}
 
-		public void UpdateRegistersAndFlags()
-		{
-
-		}
-
+		/// <summary>
+		/// Decodes a byte into opcode instructions.
+		/// </summary>
+		/// <param name="byteToDecode">Byte to be decoded.</param>
+		/// <returns>String representation.</returns>
 		public string Decode(byte byteToDecode)
 		{
 			//string returnString = "";
@@ -127,6 +150,16 @@ namespace Team_Instruction_Fetch_Decode_Execute
 
 					ProcessorStats.nonUnaryInstructions++;
 					ProcessorStats.arithmeticInstructions++;
+
+					if ((short) Accumulator < 0)
+					{
+						NegativeFlag = true;
+					}
+					else if ((short) Accumulator == 0)
+					{
+						ZeroFlag = true;
+					}
+
 					break;
 				#endregion
 				#region AND or OR Instruction
@@ -177,7 +210,16 @@ namespace Team_Instruction_Fetch_Decode_Execute
 					ProcessorStats.nonUnaryInstructions++;
 					ProcessorStats.arithmeticInstructions++;
 					ProcessorStats.logicInstructions++;
-				
+
+					if ((short) Accumulator < 0)
+					{
+						NegativeFlag = true;
+					}
+					else if ((short) Accumulator == 0)
+					{
+						ZeroFlag = true;
+					}
+
 					break;
 				#endregion
 				#region XOR or LDA Instruction
@@ -185,6 +227,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 					if (lowerNibble == 0x01) // XOR (A ^ X)
 					{
 						ConstructInstructionRep(ProgramCounter, byteToDecode, "XOR X", " ", false, false);
+						Accumulator = Execute.XOR_OP (Accumulator, X_Register);
 						ProcessorStats.xRegisterAddressing++;
 						Accumulator = Execute.XOR_OP(Accumulator, X_Register);
 						ProcessorStats.arithmeticInstructions++;
@@ -195,6 +238,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 					else if (lowerNibble == 0x02) // XOR (A ^ IMM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "XOR", "imm", true, false);
+						Accumulator = Execute.XOR_OP (Accumulator, operand);
 						ProcessorStats.immediateAddressing++;
 						Accumulator = Execute.XOR_OP(Accumulator, operand);
 						ProcessorStats.arithmeticInstructions++;
@@ -232,7 +276,18 @@ namespace Team_Instruction_Fetch_Decode_Execute
 						ProcessorStats.accumulatorAddressing++;
 						ProcessorStats.memoryAddressing++;
 					}
-					ProcessorStats.nonUnaryInstructions++; 
+					
+					ProcessorStats.nonUnaryInstructions++;
+					
+					if ((short) Accumulator < 0)
+					{
+						NegativeFlag = true;
+					}
+					else if ((short) Accumulator == 0)
+					{
+						ZeroFlag = true;
+					}
+
 					break;
 				#endregion
 				#region LDX or STA Instruction
@@ -243,6 +298,15 @@ namespace Team_Instruction_Fetch_Decode_Execute
 						ProcessorStats.xRegisterAddressing++;
 
 						X_Register = Execute.LDX(Accumulator);
+
+						if ((short) X_Register < 0)
+						{
+							NegativeFlag = true;
+						}
+						else if ((short) X_Register == 0)
+						{
+							ZeroFlag = true;
+						}
 					}
 					else if (lowerNibble == 0x02) // LDX (IMM -> X)
 					{
@@ -250,6 +314,15 @@ namespace Team_Instruction_Fetch_Decode_Execute
 						ProcessorStats.xRegisterAddressing++;
 
 						X_Register = Execute.LDX(operand);
+
+						if ((short) X_Register < 0)
+						{
+							NegativeFlag = true;
+						}
+						else if ((short) X_Register == 0)
+						{
+							ZeroFlag = true;
+						}
 					}
 					else if (lowerNibble == 0x03) // LDX (MEM -> X)
 					{
@@ -257,6 +330,15 @@ namespace Team_Instruction_Fetch_Decode_Execute
 						ProcessorStats.xRegisterAddressing++;
 						X_Register = Execute.LDX(Memory[operand]);
 						ProcessorStats.memoryAddressing++;
+
+						if ((short) X_Register < 0)
+						{
+							NegativeFlag = true;
+						}
+						else if ((short) X_Register == 0)
+						{
+							ZeroFlag = true;
+						}
 
 					}
 					else if (lowerNibble == 0x09) // STA (A -> X)
@@ -296,7 +378,10 @@ namespace Team_Instruction_Fetch_Decode_Execute
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "BRT", "mem", true, true);
 
-						ProgramCounter = operand;
+						if (TrueFlag)
+                        {
+							ProgramCounter = operand;
+						}
 
 						ProcessorStats.unaryInstructions++;
 						ProcessorStats.controlInstructions++;
@@ -311,7 +396,10 @@ namespace Team_Instruction_Fetch_Decode_Execute
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "BRNT", "mem", true, true);
 
-						ProgramCounter = operand;
+						if (!TrueFlag)
+						{
+							ProgramCounter = operand;
+						}
 
 						ProcessorStats.nonUnaryInstructions++;
 						ProcessorStats.controlInstructions++;
@@ -321,18 +409,21 @@ namespace Team_Instruction_Fetch_Decode_Execute
 					else if (lowerNibble == 0x09) // CPE (A to X)
 					{
 						ConstructInstructionRep(ProgramCounter, byteToDecode, "CPE X", " ", false, false);
+						TrueFlag = Execute.CPE (Accumulator, X_Register);
 						ProcessorStats.xRegisterAddressing++;
 						ProcessorStats.nonUnaryInstructions++;
 					}
 					else if (lowerNibble == 0x0A) // CPE (A to IMM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "CPE", "imm", true, false);
+						TrueFlag = Execute.CPE (Accumulator, operand);
 						ProcessorStats.nonUnaryInstructions++;
 						ProcessorStats.immediateAddressing++;
 					}
 					else if (lowerNibble == 0x0B) // CPE (A to MEM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "CPE", "mem", true, true);
+						TrueFlag = Execute.CPE (Accumulator, operand);
 						ProcessorStats.nonUnaryInstructions++;
 						ProcessorStats.memoryAddressing++;
 					}
@@ -345,32 +436,38 @@ namespace Team_Instruction_Fetch_Decode_Execute
 					{
 						ConstructInstructionRep(ProgramCounter, byteToDecode, "CPLT X", " ", false, false);
 						ProcessorStats.xRegisterAddressing++;
+						TrueFlag = Execute.CPLT (Accumulator, X_Register);
 					}
 					else if (lowerNibble == 0x02) // CPLT (A to IMM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "CPLT", "imm", true, false);
 						ProcessorStats.immediateAddressing++;
+						TrueFlag = Execute.CPLT (Accumulator, operand);
 					}
 					else if (lowerNibble == 0x03) // CPLT (A to MEM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "CPLT", "mem", true, true);
 						ProcessorStats.memoryAddressing++;
+						TrueFlag = Execute.CPLT (Accumulator, operand);
 
 					}
 					else if (lowerNibble == 0x09) // CPLE (A to X)
 					{
 						ConstructInstructionRep(ProgramCounter, byteToDecode, "CPLE X", " ", false, false);
 						ProcessorStats.xRegisterAddressing++;
+						TrueFlag = Execute.CPLE (Accumulator, X_Register);
 					}
 					else if (lowerNibble == 0x0A) // CPLE (A to IMM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "CPLE", "imm", true, false);
 						ProcessorStats.immediateAddressing++;
+						TrueFlag = Execute.CPLE (Accumulator, operand);
 					}
 					else if (lowerNibble == 0x0B) // CPLE (A to MEM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "CPLE", "mem", true, true);
 						ProcessorStats.memoryAddressing++;
+						TrueFlag = Execute.CPLE (Accumulator, operand);
 
 					}
 					ProcessorStats.nonUnaryInstructions++; 
@@ -383,20 +480,20 @@ namespace Team_Instruction_Fetch_Decode_Execute
 						ConstructInstructionRep(ProgramCounter, byteToDecode, "CPGT X", " ", false, false);
 						ProcessorStats.xRegisterAddressing++;
 
-						bool result = Execute.CPGT(Accumulator, X_Register);
+						TrueFlag = Execute.CPGT (Accumulator, X_Register);
 					}
 					else if (lowerNibble == 0x02) // CPGT (A to IMM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "CPGT", "imm", true, false);
 						ProcessorStats.immediateAddressing++;
-						
-						bool result = Execute.CPGT(Accumulator, operand);
+
+						TrueFlag = Execute.CPGT (Accumulator, operand);
 					}
 					else if (lowerNibble == 0x03) // CPGT (A to MEM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "CPGT", "mem", true, true);
 
-						bool result = Execute.CPGT(Accumulator, Memory[operand]);
+						TrueFlag = Execute.CPGT (Accumulator, Memory[operand]);
 						ProcessorStats.memoryAddressing++;
 
 					}
@@ -404,19 +501,19 @@ namespace Team_Instruction_Fetch_Decode_Execute
 					{
 						ConstructInstructionRep(ProgramCounter, byteToDecode, "CPGE X", " ", false, false);
 						ProcessorStats.xRegisterAddressing++;
-						bool result = Execute.CPGE(Accumulator, X_Register);
+						TrueFlag = Execute.CPGE (Accumulator, X_Register);
 					}
 					else if (lowerNibble == 0x0A) // CPGE (A to IMM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "CPGE", "imm", true, false);
 						ProcessorStats.immediateAddressing++;
-						bool result = Execute.CPGE(Accumulator, operand);
+						TrueFlag = Execute.CPGE (Accumulator, operand);
 					}
 					else if (lowerNibble == 0x0B) // CPGE (A to MEM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "CPGE", "mem", true, true);
 
-						bool result = Execute.CPGE(Accumulator, Memory[operand]);
+						TrueFlag = Execute.CPGE (Accumulator, Memory[operand]);
 						ProcessorStats.memoryAddressing++;
 
 					}
@@ -510,12 +607,30 @@ namespace Team_Instruction_Fetch_Decode_Execute
 						Accumulator = Execute.NEG(Accumulator);
 						ProcessorStats.accumulatorAddressing++;
 
+						if ((short) Accumulator < 0)
+						{
+							NegativeFlag = true;
+						}
+						else if ((short) Accumulator == 0)
+						{
+							ZeroFlag = true;
+						}
+
 					}
 					else if (lowerNibble == 0x01) // NEG (X)
 					{
 						ConstructInstructionRep(ProgramCounter, byteToDecode, "NEG X", " ", false, false);
 						ProcessorStats.xRegisterAddressing++;
 						X_Register = Execute.NEG(X_Register);
+
+						if ((short) X_Register < 0)
+						{
+							NegativeFlag = true;
+						}
+						else if ((short) X_Register == 0)
+						{
+							ZeroFlag = true;
+						}
 					}
 					else if (lowerNibble == 0x08) // NOT (A)
 					{
@@ -524,12 +639,30 @@ namespace Team_Instruction_Fetch_Decode_Execute
 						Accumulator = Execute.NOT(Accumulator);
 						ProcessorStats.accumulatorAddressing++;
 
+						if ((short) Accumulator < 0)
+						{
+							NegativeFlag = true;
+						}
+						else if ((short) Accumulator == 0)
+						{
+							ZeroFlag = true;
+						}
+
 					}
 					else if (lowerNibble == 0x09) // NOT (X)
 					{
 						ConstructInstructionRep(ProgramCounter, byteToDecode, "NOT X", " ", false, false);
 						ProcessorStats.xRegisterAddressing++;
 						X_Register = Execute.NOT(X_Register);
+
+						if ((short) X_Register < 0)
+						{
+							NegativeFlag = true;
+						}
+						else if ((short) X_Register == 0)
+						{
+							ZeroFlag = true;
+						}
 					}
 					ProcessorStats.unaryInstructions++;
 					break;
@@ -565,6 +698,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 					#endregion
 			}
 
+			// Update GUI
 			Form.UpdateRegisters();
 			Form.UpdateFlags();
 
@@ -573,6 +707,10 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			return InstructionRep;
 		}
 
+		/// <summary>
+		/// Get the operand from memory for the instruction.
+		/// </summary>
+		/// <returns>The operand in memory.</returns>
 		public ushort FetchOperand()
 		{
 			ProgramCounter++; // Increment the program counter
@@ -589,6 +727,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 
 			return operand; // Return the constructed 16-bit operand
 		}
+
 		
 		public uint FetchMemoryOperand()
 		{
@@ -613,6 +752,15 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			return operand; // Return the constructed 16-bit operand
 		}
 
+		/// <summary>
+		/// Creates the string representation of instruction.
+		/// </summary>
+		/// <param name="currentPC">Program counter.</param>
+		/// <param name="instructionOpcode">Instruction opcode.</param>
+		/// <param name="instructionName">Name of instruction.</param>
+		/// <param name="addressingName">Addressing mode.</param>
+		/// <param name="hasOperand">True if operand is present.</param>
+		/// <returns>Operand if needed.</returns>
 		public uint ConstructInstructionRep(uint currentPC, byte instructionOpcode, string instructionName, string addressingName, bool hasOperand, bool isMemoryAddress)
 		{
 			uint operand;

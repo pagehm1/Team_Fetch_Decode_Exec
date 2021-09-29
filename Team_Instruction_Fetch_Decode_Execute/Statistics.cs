@@ -65,7 +65,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 
         public int noAddresssing { get; set; }
 
-        public Statistics()
+        public Statistics(Form1 form)
         {
             totalInstructions = 0;
             unaryInstructions = 0;
@@ -78,6 +78,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
             xRegisterAddressing = 0;
             memoryAddressing = 0;
             noAddresssing = 0;
+            this.form = form;
         }
 
         public void formatStats()
