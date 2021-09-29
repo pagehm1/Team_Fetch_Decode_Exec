@@ -728,7 +728,6 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			return operand; // Return the constructed 16-bit operand
 		}
 
-		
 		public uint FetchMemoryOperand()
 		{
 			ProgramCounter++; // Increment the program counter
@@ -798,57 +797,5 @@ namespace Team_Instruction_Fetch_Decode_Execute
 				return 0;
 			}
 		}
-
-		/*
-		public void incrementPC()
-		{
-			ProgramCounter++;
-		}
-
-		public void Execute(byte byteToDecode)
-		{
-			//string returnString = "";
-			ushort operand;
-
-			byte upperNibble = (byte)(byteToDecode >> 4);
-			byte lowerNibble = (byte)(byteToDecode & 0b00001111);
-
-			switch (instructionBits)
-			{
-				case 0x00:
-					if (lowerNibble == 0x01) // ADD (A + X)
-					{
-						return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " ADD X";
-					}
-					else if (lowerNibble == 0x02) // ADD (A + IMM)
-					{
-						operand = FetchOperand();
-						return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " ADD " + operand.ToString() + ", imm";
-					}
-					else if (lowerNibble == 0x03) // ADD (A + MEM)
-					{
-						operand = FetchOperand();
-						return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " ADD " + operand.ToString() + ", mem";
-					}
-					else if (lowerNibble == 0x09) // SUB (A - X)
-					{
-						return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " SUB X";
-					}
-					else if (lowerNibble == 0x0A) // SUB (A - IMM)
-					{
-						operand = FetchOperand();
-						return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " SUB " + operand.ToString() + ", imm";
-					}
-					else if (lowerNibble == 0x0B) // SUB (A - MEM)
-					{
-						operand = FetchOperand();
-						return ProgramCounter.ToString() + " " + byteToDecode.ToString() + " SUB " + operand.ToString() + ", mem";
-					}
-
-					break;
-				default:
-					break;           
-		}
-		*/
 	}
 }

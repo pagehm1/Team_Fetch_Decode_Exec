@@ -27,9 +27,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
         {
             while (primaryProcessor.IsStopped != 1)
             {
-              outputListBox.Items.Add(primaryProcessor.Decode(primaryProcessor.Memory[primaryProcessor.ProgramCounter])); // Add string we built about instruction into list box
-
-				//AccumulatorTextBox.Text = primaryProcessor.Accumulator;
+              outputListBox.Items.Add(primaryProcessor.Decode(primaryProcessor.Memory[primaryProcessor.ProgramCounter]));
 			}
 
 			primaryProcessor.ProcessorStats.formatStats();
@@ -61,7 +59,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 					UpdateFlags();
 				}
 
-                binaryFileMaker(filePath);
+                //binaryFileMaker(filePath);
 				binReader.Close();
                 
             }
@@ -162,5 +160,10 @@ namespace Team_Instruction_Fetch_Decode_Execute
 				addressingListBox.Items.Add(s);
 			}
 		}
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+			MessageBox.Show("Team 3 - Instruction Set Simulation: created by Hunter Page, Zakk Trent, Micah DePetro, and Brett Hamilton.");
+        }
     }
 }
