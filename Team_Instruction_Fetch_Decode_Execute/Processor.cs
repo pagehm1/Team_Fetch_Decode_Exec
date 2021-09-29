@@ -1,3 +1,15 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//	Project:           Project 1 - Instruction Set
+//	File Name:         Processor.cs
+//	Description:       Emulates a computer processor that reads in and executes instructions.
+//	Course:            CSCI 4717 - Computer Architecture	
+//	Author:            Hunter Page, pagehm1@etsu.edu, Dept. of Computing, East Tennessee State University
+//	Created:           Monday, September 13, 2021
+//	Copyright:         Hunter Page, Zakk Trent, Micah DePetro, and Brett Hamilton, 2021
+//
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,38 +18,87 @@ using System.Threading.Tasks;
 
 namespace Team_Instruction_Fetch_Decode_Execute
 {
+	/// <summary>
+	/// Emulates a computer processor.
+	/// </summary>
 	public class Processor
 	{
 		#region Processor Properties
+		/// <summary>
+		/// Instance of Windows form.
+		/// </summary>
 		public Form1 Form;
 
+		/// <summary>
+		/// Byte array the represents computer memory.
+		/// </summary>
 		public byte[] Memory { get; set; }
 
+		/// <summary>
+		/// Accumulator register.
+		/// </summary>
 		public ushort Accumulator { get; set; }
 
+		/// <summary>
+		/// X register.
+		/// </summary>
 		public ushort X_Register { get; set; }
 
+		/// <summary>
+		/// Program counter for the CPU.
+		/// </summary>
 		public ushort ProgramCounter { get; set; }
 
+		/// <summary>
+		/// Stack register.
+		/// </summary>
 		public ushort StackRegister { get; set; }
 
+		/// <summary>
+		/// Boolean representing negative flag for results.
+		/// </summary>
 		public bool NegativeFlag { get; set; }
 
+		/// <summary>
+		/// Boolean representing carry flag for results.
+		/// </summary>
 		public bool CarryFlag { get; set; }
 
+		/// <summary>
+		/// Boolean representing zero flag for results.
+		/// </summary>
 		public bool ZeroFlag { get; set; }
 
+		/// <summary>
+		/// True or false based on comparison results.
+		/// </summary>
 		public bool TrueFlag { get; set; }
 
+		/// <summary>
+		/// Counter variable.
+		/// </summary>
 		public int counter { get; set; }
 
+		/// <summary>
+		/// Represents if CPU is stopped or not.
+		/// </summary>
 		public int IsStopped { get; set; }
 
+		/// <summary>
+		/// Represents string of instruction to be displayed.
+		/// </summary>
 		public string InstructionRep { get; set; }
 
+		/// <summary>
+		/// List for updated items.
+		/// </summary>
 		public List<Object> updatedItems { get; set; }
 		#endregion
 
+		/// <summary>
+		/// Constructor that makes a new processor with a Form.
+		/// </summary>
+		/// <param name="form">The GUI Form.</param>
 		public Processor(Form1 form)
 		{
 			Form = form;
@@ -52,12 +113,21 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			TrueFlag = false;
 		}
 
+		/// <summary>
+		/// Fills the memory array.
+		/// </summary>
+		/// <param name="byteToInsert">Byte going into memory.</param>
 		public void PopulateMemory(byte byteToInsert)
 		{
 			Memory[counter] = byteToInsert;
 			counter++;
 		}
 
+		/// <summary>
+		/// Decodes a byte into opcode instructions.
+		/// </summary>
+		/// <param name="byteToDecode">Byte to be decoded.</param>
+		/// <returns>String representation.</returns>
 		public string Decode(byte byteToDecode)
 		{
 			//string returnString = "";
@@ -66,6 +136,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			byte upperNibble = (byte)(byteToDecode >> 4);
 			byte lowerNibble = (byte)(byteToDecode & 0b00001111);
 
+			// Decodes the byte based on upper and lower nibbles
 			switch (upperNibble)
 			{
 				#region ADD or SUB Instruction
@@ -518,12 +589,17 @@ namespace Team_Instruction_Fetch_Decode_Execute
 				#endregion
 			}
 
+			// Update GUI
 			Form.UpdateRegisters();
 			Form.UpdateFlags();
 			
 			return " ";
 		}
 
+		/// <summary>
+		/// Get the operand from memory for the instruction.
+		/// </summary>
+		/// <returns>The operand in memory.</returns>
 		public ushort FetchOperand()
 		{
 			ProgramCounter++; // Increment the program counter
@@ -541,6 +617,15 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			return operand; // Return the constructed 16-bit operand
 		}
 
+		/// <summary>
+		/// Creates the string representation of instruction.
+		/// </summary>
+		/// <param name="currentPC">Program counter.</param>
+		/// <param name="instructionOpcode">Instruction opcode.</param>
+		/// <param name="instructionName">Name of instruction.</param>
+		/// <param name="addressingName">Addressing mode.</param>
+		/// <param name="hasOperand">True if operand is present.</param>
+		/// <returns>Operand if needed.</returns>
 		public ushort ConstructInstructionRep(ushort currentPC, byte instructionOpcode, string instructionName, string addressingName, bool hasOperand)
 		{
 			ushort operand;
