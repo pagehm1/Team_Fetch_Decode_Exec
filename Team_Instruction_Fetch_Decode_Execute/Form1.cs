@@ -18,7 +18,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 
 		public Form1()
 		{
-			primaryProcessor = new Processor(this);
+			primaryProcessor = new Processor();
 			position = 0;
 			InitializeComponent();
 		}
@@ -128,6 +128,22 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			tbCarryFlag.Text = primaryProcessor.CarryFlag.ToString();
 			tbZeroFlag.Text = primaryProcessor.ZeroFlag.ToString();
 			tbTruthFlag.Text = primaryProcessor.TrueFlag.ToString();
+		}
+		
+		public void populateStatisticsListBox(string[] str)
+        {
+			foreach(string s in str)
+            {
+				statisticsTextBox.Items.Add(s);
+            }
+        }
+
+		public void populateAddressListBox(string[] str)
+		{
+			foreach (string s in str)
+			{
+				addressingListBox.Items.Add(s);
+			}
 		}
 	}
 }

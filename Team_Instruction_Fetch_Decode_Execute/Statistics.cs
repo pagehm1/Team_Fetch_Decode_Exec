@@ -9,6 +9,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
     class Statistics
 
     {
+        Processor p = new Processor();
         Form1 form = new Form1();
         public int totalInstructions { get; set; }
         public int unaryInstructions { get; set; }
@@ -44,7 +45,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 
             string[] aStats = { "Immediate Addressing: " + immediateAddressing, "Accumulator Addressing: " + accumulatorAddressing, "X-Register Addresssing: " 
                                     + xRegisterAddressing, "Memory Addressing: " + memoryAddressing};
-            form.populateAddressingListBox(aStats);
+            form.populateAddressListBox(aStats);
         }
 
     }
