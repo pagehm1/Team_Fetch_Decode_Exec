@@ -10,47 +10,47 @@ namespace Team_Instruction_Fetch_Decode_Execute
 	{
 		//class for if a method is used often for more than one exec instruction)
 
-		public static ushort Add(ushort registerOne, ushort operand)
+		public static ushort Add(ushort registerOne, uint operand)
 		{
 			return (ushort)(registerOne + operand);
 		}
 
-		public static ushort Sub(ushort registerOne, ushort operand)
+		public static ushort Sub(ushort registerOne, uint operand)
 		{
 			return (ushort)(registerOne - operand);
 		}
 
-		public static ushort AND_OP(ushort registerOne, ushort operand)
+		public static ushort AND_OP(ushort registerOne, uint operand)
 		{
 			return (ushort)(registerOne & operand);
 		}
 
-		public static ushort OR_OP(ushort registerOne, ushort operand)
+		public static ushort OR_OP(ushort registerOne, uint operand)
 		{
 			return (ushort)(registerOne | operand);
 		}
 
-		public static ushort XOR_OP(ushort registerOne, ushort operand)
+		public static ushort XOR_OP(ushort registerOne, uint operand)
 		{
 			return (ushort)(registerOne ^ operand);
 		}
 
-		public static ushort LDA(ushort operand)
+		public static ushort LDA(uint operand)
 		{
 			return (ushort) operand;
 		}
 
-		public static ushort LDX(ushort operand)
+		public static ushort LDX(uint operand)
 		{
 			return (ushort) operand;
 		}
 
-		public static ushort STA(ushort operand)
+		public static ushort STA(uint operand)
 		{
 			return (ushort) operand;
 		}
 
-		public static bool CPGT(ushort registerOne, ushort operand)
+		public static bool CPGT(ushort registerOne, uint operand)
 		{
 			if (registerOne > operand)
 			{
@@ -62,7 +62,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			}
 		}
 
-		public static bool CPGE(ushort registerOne, ushort operand)
+		public static bool CPGE(ushort registerOne, uint operand)
 		{
 			if (registerOne >= operand)
 			{

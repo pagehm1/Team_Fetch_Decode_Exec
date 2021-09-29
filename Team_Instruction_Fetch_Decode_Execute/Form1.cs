@@ -23,14 +23,16 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			InitializeComponent();
 		}
 
-		public void StartProc()
-		{
-			while (primaryProcessor.IsStopped != 1)
-			{
-				//ListBox.Add(primaryProcessor.Decode(primaryProcessor.Memory[primaryProcessor.ProgramCounter])); // Add string we built about instruction into list box
+        public void StartProc()
+        {
+            while (primaryProcessor.IsStopped != 1)
+            {
+              outputListBox.Items.Add(primaryProcessor.Decode(primaryProcessor.Memory[primaryProcessor.ProgramCounter])); // Add string we built about instruction into list box
 
 				//AccumulatorTextBox.Text = primaryProcessor.Accumulator;
 			}
+
+			primaryProcessor.ProcessorStats.formatStats();
 		}
 
 		private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -59,11 +61,11 @@ namespace Team_Instruction_Fetch_Decode_Execute
 					UpdateFlags();
 				}
 
-				binaryFileMaker(filePath);
-
-				//StartProc();
-			}
-		}
+                binaryFileMaker(filePath);
+				binReader.Close();
+                
+            }
+        }
 
 		/// <summary>
 		/// reads a record from a binary file
@@ -84,7 +86,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			filePath += ".bin";
 			BinaryWriter binWriter = new BinaryWriter(File.Open(filePath, FileMode.Create, FileAccess.Write));
 
-			byte[] testArray = new byte[5] { 0x32, 0x29, 0x01, 0x2B, 0xFF };
+            byte[] testArray = new byte[21] { 0x2A, 0x05, 0xA3, 0x30, 0x59, 0x4B, 0x00, 0x00, 0x0D, 0x53, 0x00, 0x00, 0x14, 0x02, 0x00, 0x01, 0xA3, 0x00, 0x00, 0x04, 0xFF };
 
 			binWriter.Write(testArray);
 
@@ -111,8 +113,13 @@ namespace Team_Instruction_Fetch_Decode_Execute
 				BinaryTextBox.Text += (char)((byteToDisplay & 0b00001111) + 0x30);
 			}
 
-			BinaryTextBox.Text += " ";
-		}
+            BinaryTextBox.Text += " ";
+        }
+
+        private void decodeButton_Click_1(object sender, EventArgs e)
+        {
+            StartProc();
+        }
 
 		public void UpdateRegisters()
 		{
@@ -129,5 +136,31 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			tbZeroFlag.Text = primaryProcessor.ZeroFlag.ToString();
 			tbTruthFlag.Text = primaryProcessor.TrueFlag.ToString();
 		}
-	}
+
+        private void Decoding_Button_Click(object sender, EventArgs e)
+        {
+			StartProc();
+		}
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+			Application.Exit();
+        }
+
+		public void populateStats(string[] str)
+		{
+			foreach(string s in str)
+			{
+				statisticsTextBox.Items.Add(s);
+			}
+		}
+
+		public void populateAddress(string[] str)
+		{
+			foreach(string s in str)
+			{
+				addressingListBox.Items.Add(s);
+			}
+		}
+    }
 }
