@@ -58,11 +58,6 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			counter++;
 		}
 
-		public void UpdateRegistersAndFlags()
-		{
-			 
-		}
-
 		public string Decode(byte byteToDecode)
 		{
 			//string returnString = "";
@@ -80,6 +75,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 						ConstructInstructionRep(ProgramCounter, byteToDecode, "ADD X", " ", false);
 
 						Accumulator = Execute.Add(Accumulator, X_Register);
+						
 					}
 					else if (lowerNibble == 0x02) // ADD (A + IMM)
 					{
@@ -111,6 +107,15 @@ namespace Team_Instruction_Fetch_Decode_Execute
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "SUB", "mem", true);
 
 						Accumulator = Execute.Sub(Accumulator, Memory[operand]);
+					}
+
+					if ((short) Accumulator < 0)
+					{
+						NegativeFlag = true;
+					}
+					else if ((short) Accumulator == 0)
+					{
+						ZeroFlag = true;
 					}
 
 					break;
@@ -154,6 +159,16 @@ namespace Team_Instruction_Fetch_Decode_Execute
 						Accumulator = Execute.OR_OP(Accumulator, Memory[operand]);
 					}
 
+					if ((short) Accumulator < 0)
+					{
+						NegativeFlag = true;
+					}
+					else if ((short) Accumulator == 0)
+					{
+						ZeroFlag = true;
+					}
+
+
 					break;
 				#endregion
 				#region XOR or LDA Instruction
@@ -195,6 +210,15 @@ namespace Team_Instruction_Fetch_Decode_Execute
 						Accumulator = Execute.LDA(Memory[operand]);
 					}
 
+					if ((short) Accumulator < 0)
+					{
+						NegativeFlag = true;
+					}
+					else if ((short) Accumulator == 0)
+					{
+						ZeroFlag = true;
+					}
+
 					break;
 				#endregion
 				#region LDX or STA Instruction
@@ -204,18 +228,45 @@ namespace Team_Instruction_Fetch_Decode_Execute
 						ConstructInstructionRep(ProgramCounter, byteToDecode, "LDX A", " ", false);
 
 						X_Register = Execute.LDX(Accumulator);
+
+						if ((short) X_Register < 0)
+						{
+							NegativeFlag = true;
+						}
+						else if ((short) X_Register == 0)
+						{
+							ZeroFlag = true;
+						}
 					}
 					else if (lowerNibble == 0x02) // LDX (IMM -> X)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "LDX", "imm", true);
 
 						X_Register = Execute.LDX(operand);
+
+						if ((short) X_Register < 0)
+						{
+							NegativeFlag = true;
+						}
+						else if ((short) X_Register == 0)
+						{
+							ZeroFlag = true;
+						}
 					}
 					else if (lowerNibble == 0x03) // LDX (MEM -> X)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "LDX", "mem", true);
 
 						X_Register = Execute.LDX(Memory[operand]);
+
+						if ((short) X_Register < 0)
+						{
+							NegativeFlag = true;
+						}
+						else if ((short) X_Register == 0)
+						{
+							ZeroFlag = true;
+						}
 					}
 					else if (lowerNibble == 0x09) // STA (A -> X)
 					{
@@ -258,14 +309,17 @@ namespace Team_Instruction_Fetch_Decode_Execute
 					else if (lowerNibble == 0x09) // CPE (A to X)
 					{
 						ConstructInstructionRep(ProgramCounter, byteToDecode, "CPE X", " ", false);
+						TrueFlag = Execute.CPE (Accumulator, X_Register);
 					}
 					else if (lowerNibble == 0x0A) // CPE (A to IMM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "CPE", "imm", true);
+						TrueFlag = Execute.CPE (Accumulator, operand);
 					}
 					else if (lowerNibble == 0x0B) // CPE (A to MEM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "CPE", "mem", true);
+						TrueFlag = Execute.CPE (Accumulator, operand);
 					}
 
 					break;
@@ -275,26 +329,32 @@ namespace Team_Instruction_Fetch_Decode_Execute
 					if (lowerNibble == 0x01) // CPLT (A to X)
 					{
 						ConstructInstructionRep(ProgramCounter, byteToDecode, "CPLT X", " ", false);
+						TrueFlag = Execute.CPLT (Accumulator, X_Register);
 					}
 					else if (lowerNibble == 0x02) // CPLT (A to IMM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "CPLT", "imm", true);
+						TrueFlag = Execute.CPLT (Accumulator, operand);
 					}
 					else if (lowerNibble == 0x03) // CPLT (A to MEM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "CPLT", "mem", true);
+						TrueFlag = Execute.CPLT (Accumulator, operand);
 					}
 					else if (lowerNibble == 0x09) // CPLE (A to X)
 					{
 						ConstructInstructionRep(ProgramCounter, byteToDecode, "CPLE X", " ", false);
+						TrueFlag = Execute.CPLE (Accumulator, X_Register);
 					}
 					else if (lowerNibble == 0x0A) // CPLE (A to IMM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "CPLE", "imm", true);
+						TrueFlag = Execute.CPLE (Accumulator, operand);
 					}
 					else if (lowerNibble == 0x0B) // CPLE (A to MEM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "CPLE", "mem", true);
+						TrueFlag = Execute.CPLE (Accumulator, operand);
 					}
 
 					break;
@@ -305,37 +365,38 @@ namespace Team_Instruction_Fetch_Decode_Execute
 					{
 						ConstructInstructionRep(ProgramCounter, byteToDecode, "CPGT X", " ", false);
 
-						bool result = Execute.CPGT(Accumulator, X_Register);
+						TrueFlag = Execute.CPGT(Accumulator, X_Register);
+
 					}
 					else if (lowerNibble == 0x02) // CPGT (A to IMM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "CPGT", "imm", true);
 
-						bool result = Execute.CPGT(Accumulator, operand);
+						TrueFlag = Execute.CPGT(Accumulator, operand);
 					}
 					else if (lowerNibble == 0x03) // CPGT (A to MEM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "CPGT", "mem", true);
 
-						bool result = Execute.CPGT(Accumulator, Memory[operand]);
+						TrueFlag = Execute.CPGT(Accumulator, Memory[operand]);
 					}
 					else if (lowerNibble == 0x09) // CPGE (A to X)
 					{
 						ConstructInstructionRep(ProgramCounter, byteToDecode, "CPGE X", " ", false);
 
-						bool result = Execute.CPGE(Accumulator, X_Register);
+						TrueFlag = Execute.CPGE(Accumulator, X_Register);
 					}
 					else if (lowerNibble == 0x0A) // CPGE (A to IMM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "CPGE", "imm", true);
 
-						bool result = Execute.CPGE(Accumulator, operand);
+						TrueFlag = Execute.CPGE(Accumulator, operand);
 					}
 					else if (lowerNibble == 0x0B) // CPGE (A to MEM)
 					{
 						operand = ConstructInstructionRep(ProgramCounter, byteToDecode, "CPGE", "mem", true);
 
-						bool result = Execute.CPGE(Accumulator, Memory[operand]);
+						TrueFlag = Execute.CPGE(Accumulator, Memory[operand]);
 					}
 
 					break;
@@ -372,24 +433,60 @@ namespace Team_Instruction_Fetch_Decode_Execute
 						ConstructInstructionRep(ProgramCounter, byteToDecode, "NEG A", " ", false);
 
 						Accumulator = Execute.NEG(Accumulator);
+
+						if ((short) Accumulator < 0)
+						{
+							NegativeFlag = true;
+						}
+						else if ((short) Accumulator == 0)
+						{
+							ZeroFlag = true;
+						}
 					}
 					else if (lowerNibble == 0x01) // NEG (X)
 					{
 						ConstructInstructionRep(ProgramCounter, byteToDecode, "NEG X", " ", false);
 
 						X_Register = Execute.NEG(X_Register);
+
+						if ((short) X_Register < 0)
+						{
+							NegativeFlag = true;
+						}
+						else if ((short) X_Register == 0)
+						{
+							ZeroFlag = true;
+						}
 					}
 					else if (lowerNibble == 0x08) // NOT (A)
 					{
 						ConstructInstructionRep(ProgramCounter, byteToDecode, "NOT A", " ", false);
 
 						Accumulator = Execute.NOT(Accumulator);
+
+						if ((short) Accumulator < 0)
+						{
+							NegativeFlag = true;
+						}
+						else if ((short) Accumulator == 0)
+						{
+							ZeroFlag = true;
+						}
 					}
 					else if (lowerNibble == 0x09) // NOT (X)
 					{
 						ConstructInstructionRep(ProgramCounter, byteToDecode, "NOT X", " ", false);
 
 						X_Register = Execute.NOT(X_Register);
+
+						if ((short) X_Register < 0)
+						{
+							NegativeFlag = true;
+						}
+						else if ((short) X_Register == 0)
+						{
+							ZeroFlag = true;
+						}
 					}
 
 					break;

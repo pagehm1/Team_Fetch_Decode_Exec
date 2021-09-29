@@ -50,6 +50,42 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			return (ushort) operand;
 		}
 
+		public static bool CPE (ushort registerOne, ushort operand)
+		{
+			if (registerOne == operand)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		public static bool CPLT (ushort registerOne, ushort operand)
+		{
+			if (registerOne < operand)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		public static bool CPLE (ushort registerOne, ushort operand)
+		{
+			if (registerOne <= operand)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
 		public static bool CPGT(ushort registerOne, ushort operand)
 		{
 			if (registerOne > operand)
