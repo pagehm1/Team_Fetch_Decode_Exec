@@ -60,6 +60,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 				}
 
                 binaryFileMaker(filePath);
+				binReader.Close();
                 
             }
         }
@@ -134,5 +135,14 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			tbTruthFlag.Text = primaryProcessor.TrueFlag.ToString();
 		}
 
-	}
+        private void Decoding_Button_Click(object sender, EventArgs e)
+        {
+			StartProc();
+		}
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+			Application.Exit();
+        }
+    }
 }
