@@ -90,6 +90,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 
             form.populateStats(statistics);
             form.populateAddress(addressing);
+        }
     }
     
 }

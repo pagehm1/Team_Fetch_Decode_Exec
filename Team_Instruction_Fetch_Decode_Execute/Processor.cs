@@ -52,6 +52,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			CarryFlag = false;
 			ZeroFlag = false;
 			TrueFlag = false;
+			ProcessorStats = new Statistics();
 		}
 
 		public void PopulateMemory(byte byteToInsert)
@@ -634,7 +635,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
 			else
 			{
 				InstructionRep = tempInstructionRep;
-
+				ProgramCounter++;
 				return 0;
 			}
 		}
