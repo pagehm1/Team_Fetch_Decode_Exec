@@ -31,6 +31,8 @@ namespace Team_Instruction_Fetch_Decode_Execute
 
 				//AccumulatorTextBox.Text = primaryProcessor.Accumulator;
 			}
+
+			primaryProcessor.ProcessorStats.formatStats();
 		}
 
 		private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -144,5 +146,21 @@ namespace Team_Instruction_Fetch_Decode_Execute
         {
 			Application.Exit();
         }
+
+		public void populateStats(string[] str)
+		{
+			foreach(string s in str)
+			{
+				statisticsTextBox.Items.Add(s);
+			}
+		}
+
+		public void populateAddress(string[] str)
+		{
+			foreach(string s in str)
+			{
+				addressingListBox.Items.Add(s);
+			}
+		}
     }
 }
