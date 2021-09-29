@@ -27,7 +27,16 @@ namespace Team_Instruction_Fetch_Decode_Execute
         {
             while (primaryProcessor.IsStopped != 1)
             {
-              outputListBox.Items.Add(primaryProcessor.Decode(primaryProcessor.Memory[primaryProcessor.ProgramCounter]));
+				try
+				{
+					outputListBox.Items.Add(primaryProcessor.Decode(primaryProcessor.Memory[primaryProcessor.ProgramCounter]));
+				}
+				catch (Exception)
+                {
+					MessageBox.Show("ERROR: Please load a binary file before Decoding/Executing!");
+
+					break;
+				}
 			}
 
 			primaryProcessor.ProcessorStats.formatStats();
