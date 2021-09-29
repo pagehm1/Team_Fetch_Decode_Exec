@@ -85,7 +85,7 @@ namespace Team_Instruction_Fetch_Decode_Execute
             string[] statistics = { "Total Instructions: " + totalInstructions, "Unary Instructions: " + unaryInstructions, "Non-Unary Instructions: " + nonUnaryInstructions,
                 "Control Instructions: " + controlInstructions, "Arithmetic Instructions: " + arithmeticInstructions, "Logicial Instructions: " + logicInstructions };
 
-            string[] addressing = {  "Immediate Adressing: " + immediateAddressing, "Accumulator Addressing: " + accumulatorAddressing, "X-Register Addressing: " + xRegisterAddressing
+            string[] addressing = {  "Immediate Adressing: " + immediateAddressing, "Accumulator Addressing: " + accumulatorAddressing, "X-Register Addressing: " + xRegisterAddressing ,
                 "Memory Addressing: " + memoryAddressing, "No Addressing: " + noAddresssing  };
 
             form.populateStats(statistics);
